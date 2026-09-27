@@ -70,6 +70,8 @@ special_notes = {
 # The source metadata records are kept alongside these values.
 manual_file = ROOT / "capital_overrides.json"
 manual = json.loads(manual_file.read_text(encoding="utf8")) if manual_file.exists() else {}
+aliases_file = ROOT / "capital_chinese_aliases.json"
+capital_aliases = json.loads(aliases_file.read_text(encoding="utf8"))["records"] if aliases_file.exists() else {}
 
 rows = []
 unmatched = []
@@ -103,7 +105,8 @@ for country in sorted((c for c in metadata if c["cca3"] in superset), key=lambda
     zh = country["translations"].get("zho", {}).get("common", country["name"]["common"])
     en = country["name"]["common"]
     aliases = " ".join(country.get("altSpellings", []))
-    rows.append({"iso3":code,"iso2":country["cca2"],"country":en,"countryZh":zh,"capital":capital,"latitude":float(lat),"longitude":float(lon),"label":f"{zh} / {en} — {capital}","search":f"{zh} {en} {capital} {code} {country['cca2']} {aliases}".lower(),"notes":special_notes.get(iso,""),"unMember":bool(iso in un_codes),"source":source})
+    capital_zh = capital_aliases.get(code, {}).get("nameZh", "")
+    rows.append({"iso3":code,"iso2":country["cca2"],"country":en,"countryZh":zh,"capital":capital,"capitalZh":capital_zh,"latitude":float(lat),"longitude":float(lon),"label":f"{zh} / {en} — {capital}","search":f"{zh} {en} {capital} {capital_zh} {code} {country['cca2']} {aliases}".lower(),"notes":special_notes.get(iso,""),"unMember":bool(iso in un_codes),"source":source})
 
 if unmatched:
     print(json.dumps({"unmatched": unmatched}, ensure_ascii=True, indent=2))
@@ -139,7 +142,9 @@ for feature in geography:
 
 all_lat = np.concatenate([b["latitude"] for b in boundaries])
 all_lon = np.concatenate([b["longitude"] for b in boundaries])
-output={"countries":structs(rows),"boundaries":structs(boundaries),"boundaryLatitude":all_lat,"boundaryLongitude":all_lon,"recommended197Iso3":np.array(sorted(recommended),dtype=object),"sourceNote":"Natural Earth 50m borders + 10m city points; mledoze country names; 2026-09-27"}
+output={"boundaries":structs(boundaries),"boundaryLatitude":all_lat,"boundaryLongitude":all_lon,"recommended197Iso3":np.array(sorted(recommended),dtype=object),"sourceNote":"Natural Earth 50m borders + 10m city points; mledoze country names; 2026-09-27"}
+# MATLAB R2021a rejects certain short UTF-8 struct strings emitted by SciPy's
+# v5 MAT writer. Finalize countries through native jsondecode/save below.
 savemat(ROOT / "world_geodata.mat", output, do_compression=True)
 (ROOT / "countries_superset.json").write_text(json.dumps({"selectionPending":True,"recommended197Iso3":sorted(recommended),"countries":rows},ensure_ascii=False,indent=2)+"\n",encoding="utf8")
 with (ROOT / "countries_superset.csv").open("w",encoding="utf-8-sig",newline="") as handle:
@@ -149,3 +154,4 @@ assert all(-90 <= r["latitude"] <= 90 and -180 <= r["longitude"] <= 180 for r in
 assert len(recommended) == 197
 finite = np.isfinite(all_lat[:,0]) & np.isfinite(all_lon[:,0])
 print(json.dumps({"capitals":len(rows),"recommended":len(recommended),"unMembers":sum(r['unMember'] for r in rows),"boundaryFeatures":len(boundaries),"boundaryPoints":int(finite.sum()),"maxLatSegment":float(np.nanmax(np.abs(np.diff(all_lat[:,0])))),"maxLonSegment":float(np.nanmax(np.abs(np.diff(all_lon[:,0]))))},indent=2))
+print("Now run MATLAB: addpath('tools'); finalize_geodata")

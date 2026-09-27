@@ -1,0 +1,802 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson",
+  "field": "NAME_ZH",
+  "records": {
+    "AFG": {
+      "nameZh": "喀布尔",
+      "neId": 1159151561
+    },
+    "AGO": {
+      "nameZh": "罗安达",
+      "neId": 1159151469
+    },
+    "ALB": {
+      "nameZh": "地拉那",
+      "neId": 1159151117
+    },
+    "AND": {
+      "nameZh": "安道尔城",
+      "neId": 1159149089
+    },
+    "ARE": {
+      "nameZh": "阿布扎比",
+      "neId": 1159150565
+    },
+    "ARG": {
+      "nameZh": "布宜诺斯艾利斯",
+      "neId": 1159151559
+    },
+    "ARM": {
+      "nameZh": "埃里温",
+      "neId": 1159151119
+    },
+    "ATG": {
+      "nameZh": "圣约翰",
+      "neId": 1159150457
+    },
+    "AUS": {
+      "nameZh": "堪培拉",
+      "neId": 1159151161
+    },
+    "AUT": {
+      "nameZh": "维也纳",
+      "neId": 1159151563
+    },
+    "AZE": {
+      "nameZh": "巴库",
+      "neId": 1159151123
+    },
+    "BDI": {
+      "nameZh": "基特加",
+      "neId": 1159146001
+    },
+    "BEL": {
+      "nameZh": "布鲁塞尔",
+      "neId": 1159151465
+    },
+    "BEN": {
+      "nameZh": "波多诺伏",
+      "neId": 1159150345
+    },
+    "BFA": {
+      "nameZh": "瓦加杜古",
+      "neId": 1159151173
+    },
+    "BGD": {
+      "nameZh": "达卡",
+      "neId": 1159151467
+    },
+    "BGR": {
+      "nameZh": "索非亚",
+      "neId": 1159151147
+    },
+    "BHR": {
+      "nameZh": "麦纳麦",
+      "neId": 1159150451
+    },
+    "BHS": {
+      "nameZh": "拿骚",
+      "neId": 1159151207
+    },
+    "BIH": {
+      "nameZh": "萨拉热窝",
+      "neId": 1159151177
+    },
+    "BLR": {
+      "nameZh": "明斯克",
+      "neId": 1159151149
+    },
+    "BLZ": {
+      "nameZh": "贝尔墨邦",
+      "neId": 1159151109
+    },
+    "BOL": {
+      "nameZh": "苏克雷",
+      "neId": 1159151095
+    },
+    "BRA": {
+      "nameZh": "巴西利亚",
+      "neId": 1159151443
+    },
+    "BRB": {
+      "nameZh": "布里奇顿",
+      "neId": 1159150339
+    },
+    "BRN": {
+      "nameZh": "斯里巴加湾",
+      "neId": 1159151083
+    },
+    "BTN": {
+      "nameZh": "廷布",
+      "neId": 1159151151
+    },
+    "BWA": {
+      "nameZh": "嘉柏隆里",
+      "neId": 1159151153
+    },
+    "CAF": {
+      "nameZh": "班吉",
+      "neId": 1159151111
+    },
+    "CAN": {
+      "nameZh": "渥太华",
+      "neId": 1159151059
+    },
+    "CHE": {
+      "nameZh": "伯尔尼",
+      "neId": 1159149737
+    },
+    "CHL": {
+      "nameZh": "圣地亚哥",
+      "neId": 1159151615
+    },
+    "CHN": {
+      "nameZh": "北京",
+      "neId": 1159151595
+    },
+    "CIV": {
+      "nameZh": "亚穆苏克罗",
+      "neId": 1159150999
+    },
+    "CMR": {
+      "nameZh": "雅温得",
+      "neId": 1159151115
+    },
+    "COD": {
+      "nameZh": "金沙萨",
+      "neId": 1159151539
+    },
+    "COG": {
+      "nameZh": "布拉柴维尔",
+      "neId": 1159150993
+    },
+    "COK": {
+      "nameZh": "阿瓦鲁阿",
+      "neId": 1159149099
+    },
+    "COL": {
+      "nameZh": "波哥大",
+      "neId": 1159151601
+    },
+    "COM": {
+      "nameZh": "莫洛尼",
+      "neId": 1159149083
+    },
+    "CPV": {
+      "nameZh": "培亞",
+      "neId": 1159151205
+    },
+    "CRI": {
+      "nameZh": "圣荷西",
+      "neId": 1159150849
+    },
+    "CUB": {
+      "nameZh": "哈瓦那",
+      "neId": 1159151347
+    },
+    "CYP": {
+      "nameZh": "尼科西亚",
+      "neId": 1159151209
+    },
+    "CZE": {
+      "nameZh": "布拉格",
+      "neId": 1159151359
+    },
+    "DEU": {
+      "nameZh": "柏林",
+      "neId": 1159151529
+    },
+    "DJI": {
+      "nameZh": "吉布地",
+      "neId": 1159149869
+    },
+    "DMA": {
+      "nameZh": "罗索",
+      "neId": 1159149847
+    },
+    "DNK": {
+      "nameZh": "哥本哈根",
+      "neId": 1159151437
+    },
+    "DOM": {
+      "nameZh": "圣多明哥",
+      "neId": 1159151401
+    },
+    "DZA": {
+      "nameZh": "阿尔及尔",
+      "neId": 1159151471
+    },
+    "ECU": {
+      "nameZh": "基多",
+      "neId": 1159150847
+    },
+    "EGY": {
+      "nameZh": "开罗",
+      "neId": 1159151603
+    },
+    "ERI": {
+      "nameZh": "阿斯马拉",
+      "neId": 1159150873
+    },
+    "ESP": {
+      "nameZh": "马德里",
+      "neId": 1159151503
+    },
+    "EST": {
+      "nameZh": "塔林",
+      "neId": 1159150877
+    },
+    "ETH": {
+      "nameZh": "亚的斯亚贝巴",
+      "neId": 1159151549
+    },
+    "FIN": {
+      "nameZh": "赫尔辛基",
+      "neId": 1159151419
+    },
+    "FJI": {
+      "nameZh": "苏瓦",
+      "neId": 1159150917
+    },
+    "FRA": {
+      "nameZh": "巴黎",
+      "neId": 1159151613
+    },
+    "FSM": {
+      "nameZh": "帕利基尔",
+      "neId": 1159149061
+    },
+    "GAB": {
+      "nameZh": "利伯维尔",
+      "neId": 1159150913
+    },
+    "GBR": {
+      "nameZh": "伦敦",
+      "neId": 1159151577
+    },
+    "GEO": {
+      "nameZh": "第比利斯",
+      "neId": 1159150961
+    },
+    "GHA": {
+      "nameZh": "阿克拉",
+      "neId": 1159151403
+    },
+    "GIN": {
+      "nameZh": "科纳克里",
+      "neId": 1159150997
+    },
+    "GMB": {
+      "nameZh": "班竹",
+      "neId": 1159149997
+    },
+    "GNB": {
+      "nameZh": "比绍",
+      "neId": 1159150803
+    },
+    "GNQ": {
+      "nameZh": "马拉博",
+      "neId": 1159150867
+    },
+    "GRC": {
+      "nameZh": "雅典",
+      "neId": 1159151545
+    },
+    "GRD": {
+      "nameZh": "圣乔治",
+      "neId": 1159150447
+    },
+    "GTM": {
+      "nameZh": "瓜地馬拉",
+      "neId": 1159150909
+    },
+    "GUY": {
+      "nameZh": "乔治敦",
+      "neId": 1159150585
+    },
+    "HND": {
+      "nameZh": "特古西加尔巴",
+      "neId": 1159150583
+    },
+    "HRV": {
+      "nameZh": "萨格勒布",
+      "neId": 1159150875
+    },
+    "HTI": {
+      "nameZh": "太子港",
+      "neId": 1159150589
+    },
+    "HUN": {
+      "nameZh": "布达佩斯",
+      "neId": 1159151257
+    },
+    "IDN": {
+      "nameZh": "雅加达",
+      "neId": 1159151599
+    },
+    "IND": {
+      "nameZh": "新德里",
+      "neId": 1159151541
+    },
+    "IRL": {
+      "nameZh": "都柏林",
+      "neId": 1159151309
+    },
+    "IRN": {
+      "nameZh": "德黑兰",
+      "neId": 1159151551
+    },
+    "IRQ": {
+      "nameZh": "巴格达",
+      "neId": 1159151547
+    },
+    "ISL": {
+      "nameZh": "雷克雅未克",
+      "neId": 1159150587
+    },
+    "ISR": {
+      "nameZh": "耶路撒冷",
+      "neId": 1159151203
+    },
+    "ITA": {
+      "nameZh": "罗马",
+      "neId": 1159151593
+    },
+    "JAM": {
+      "nameZh": "京斯敦",
+      "neId": 1159150855
+    },
+    "JOR": {
+      "nameZh": "安曼",
+      "neId": 1159150807
+    },
+    "JPN": {
+      "nameZh": "东京",
+      "neId": 1159151609
+    },
+    "KAZ": {
+      "nameZh": "努尔苏丹",
+      "neId": 1159150965
+    },
+    "KEN": {
+      "nameZh": "内罗毕",
+      "neId": 1159151597
+    },
+    "KGZ": {
+      "nameZh": "比什凯克",
+      "neId": 1159150813
+    },
+    "KHM": {
+      "nameZh": "金边",
+      "neId": 1159151127
+    },
+    "KIR": {
+      "nameZh": "南塔拉瓦",
+      "neId": 1159149079
+    },
+    "KNA": {
+      "nameZh": "巴斯特尔",
+      "neId": 1159150435
+    },
+    "KOR": {
+      "nameZh": "首尔",
+      "neId": 1159151523
+    },
+    "KWT": {
+      "nameZh": "科威特城",
+      "neId": 1159151361
+    },
+    "LAO": {
+      "nameZh": "万象",
+      "neId": 1159150991
+    },
+    "LBN": {
+      "nameZh": "贝鲁特",
+      "neId": 1159150957
+    },
+    "LBR": {
+      "nameZh": "蒙罗维亚",
+      "neId": 1159151311
+    },
+    "LBY": {
+      "nameZh": "的黎波里",
+      "neId": 1159151415
+    },
+    "LCA": {
+      "nameZh": "卡斯特里",
+      "neId": 1159150433
+    },
+    "LIE": {
+      "nameZh": "瓦都兹",
+      "neId": 1159146061
+    },
+    "LKA": {
+      "nameZh": "斯里贾亚瓦德纳普拉科特",
+      "neId": 1159149593
+    },
+    "LSO": {
+      "nameZh": "马塞卢",
+      "neId": 1159150831
+    },
+    "LTU": {
+      "nameZh": "维尔纽斯",
+      "neId": 1159150809
+    },
+    "LUX": {
+      "nameZh": "卢森堡",
+      "neId": 1159146437
+    },
+    "LVA": {
+      "nameZh": "里加",
+      "neId": 1159150811
+    },
+    "MAR": {
+      "nameZh": "拉巴特",
+      "neId": 1159150673
+    },
+    "MCO": {
+      "nameZh": "摩纳哥",
+      "neId": 1159149077
+    },
+    "MDA": {
+      "nameZh": "基希讷乌",
+      "neId": 1159150677
+    },
+    "MDG": {
+      "nameZh": "塔那那利佛",
+      "neId": 1159150835
+    },
+    "MDV": {
+      "nameZh": "马累",
+      "neId": 1159151201
+    },
+    "MEX": {
+      "nameZh": "墨西哥城",
+      "neId": 1159151587
+    },
+    "MHL": {
+      "nameZh": "马朱罗",
+      "neId": 1159149063
+    },
+    "MKD": {
+      "nameZh": "斯科普里",
+      "neId": 1159150073
+    },
+    "MLI": {
+      "nameZh": "巴马科",
+      "neId": 1159150945
+    },
+    "MLT": {
+      "nameZh": "瓦莱塔",
+      "neId": 1159151199
+    },
+    "MMR": {
+      "nameZh": "奈比多",
+      "neId": 1159151179
+    },
+    "MNE": {
+      "nameZh": "波德戈里察",
+      "neId": 1159149511
+    },
+    "MNG": {
+      "nameZh": "乌兰巴托",
+      "neId": 1159150781
+    },
+    "MOZ": {
+      "nameZh": "马普托",
+      "neId": 1159150683
+    },
+    "MRT": {
+      "nameZh": "努瓦克肖特",
+      "neId": 1159150943
+    },
+    "MUS": {
+      "nameZh": "路易港",
+      "neId": 1159150443
+    },
+    "MWI": {
+      "nameZh": "利隆圭",
+      "neId": 1159150907
+    },
+    "MYS": {
+      "nameZh": "吉隆坡",
+      "neId": 1159151317
+    },
+    "NAM": {
+      "nameZh": "温得和克",
+      "neId": 1159150785
+    },
+    "NER": {
+      "nameZh": "马拉迪",
+      "neId": 1159149391
+    },
+    "NGA": {
+      "nameZh": "阿布贾",
+      "neId": 1159150799
+    },
+    "NIC": {
+      "nameZh": "馬拿瓜",
+      "neId": 1159150623
+    },
+    "NIU": {
+      "nameZh": "阿洛菲",
+      "neId": 1159151741
+    },
+    "NLD": {
+      "nameZh": "阿姆斯特丹",
+      "neId": 1159151519
+    },
+    "NOR": {
+      "nameZh": "奥斯陆",
+      "neId": 1159151281
+    },
+    "NPL": {
+      "nameZh": "加德满都",
+      "neId": 1159150655
+    },
+    "NZL": {
+      "nameZh": "惠灵顿",
+      "neId": 1159151699
+    },
+    "OMN": {
+      "nameZh": "马斯喀特",
+      "neId": 1159150717
+    },
+    "PAK": {
+      "nameZh": "伊斯兰堡",
+      "neId": 1159150645
+    },
+    "PAN": {
+      "nameZh": "巴拿马城",
+      "neId": 1159150667
+    },
+    "PER": {
+      "nameZh": "利马",
+      "neId": 1159151511
+    },
+    "PHL": {
+      "nameZh": "马尼拉",
+      "neId": 1159151525
+    },
+    "PNG": {
+      "nameZh": "莫尔兹比港",
+      "neId": 1159150663
+    },
+    "POL": {
+      "nameZh": "华沙",
+      "neId": 1159151299
+    },
+    "PRK": {
+      "nameZh": "平壤",
+      "neId": 1159151303
+    },
+    "PRT": {
+      "nameZh": "里斯本",
+      "neId": 1159151273
+    },
+    "PRY": {
+      "nameZh": "亚松森",
+      "neId": 1159150621
+    },
+    "PSE": {
+      "nameZh": "拉姆安拉",
+      "neId": 1159121947
+    },
+    "QAT": {
+      "nameZh": "多哈",
+      "neId": 1159149469
+    },
+    "ROU": {
+      "nameZh": "布加勒斯特",
+      "neId": 1159151263
+    },
+    "RUS": {
+      "nameZh": "莫斯科",
+      "neId": 1159151585
+    },
+    "RWA": {
+      "nameZh": "吉佳利",
+      "neId": 1159149385
+    },
+    "SAU": {
+      "nameZh": "利雅德",
+      "neId": 1159151581
+    },
+    "SDN": {
+      "nameZh": "喀土穆",
+      "neId": 1159151275
+    },
+    "SEN": {
+      "nameZh": "达喀尔",
+      "neId": 1159151513
+    },
+    "SGP": {
+      "nameZh": "新加坡",
+      "neId": 1159151627
+    },
+    "SLB": {
+      "nameZh": "霍尼亚拉",
+      "neId": 1159150665
+    },
+    "SLE": {
+      "nameZh": "弗里敦",
+      "neId": 1159150625
+    },
+    "SLV": {
+      "nameZh": "圣萨尔瓦多",
+      "neId": 1159150853
+    },
+    "SMR": {
+      "nameZh": "圣马力诺",
+      "neId": 1159146051
+    },
+    "SOM": {
+      "nameZh": "摩加迪休",
+      "neId": 1159150715
+    },
+    "SRB": {
+      "nameZh": "贝尔格莱德",
+      "neId": 1159151079
+    },
+    "SSD": {
+      "nameZh": "朱巴",
+      "neId": 1159149449
+    },
+    "STP": {
+      "nameZh": "圣多美",
+      "neId": 1159151195
+    },
+    "SUR": {
+      "nameZh": "帕拉马里博",
+      "neId": 1159150597
+    },
+    "SVK": {
+      "nameZh": "布拉迪斯拉发",
+      "neId": 1159149463
+    },
+    "SVN": {
+      "nameZh": "卢布尔雅那",
+      "neId": 1159149461
+    },
+    "SWE": {
+      "nameZh": "斯德哥尔摩",
+      "neId": 1159151507
+    },
+    "SWZ": {
+      "nameZh": "墨巴本",
+      "neId": 1159149413
+    },
+    "SYC": {
+      "nameZh": "維多利亞",
+      "neId": 1159151191
+    },
+    "SYR": {
+      "nameZh": "大马士革",
+      "neId": 1159151269
+    },
+    "TCD": {
+      "nameZh": "恩贾梅纳",
+      "neId": 1159150863
+    },
+    "TGO": {
+      "nameZh": "洛美",
+      "neId": 1159150535
+    },
+    "THA": {
+      "nameZh": "曼谷",
+      "neId": 1159151509
+    },
+    "TJK": {
+      "nameZh": "杜尚别",
+      "neId": 1159150609
+    },
+    "TKM": {
+      "nameZh": "阿什哈巴德",
+      "neId": 1159150567
+    },
+    "TLS": {
+      "nameZh": "帝力",
+      "neId": 1159150577
+    },
+    "TON": {
+      "nameZh": "努库阿洛法",
+      "neId": 1159151187
+    },
+    "TTO": {
+      "nameZh": "西班牙港",
+      "neId": 1159149307
+    },
+    "TUN": {
+      "nameZh": "突尼斯",
+      "neId": 1159150537
+    },
+    "TUR": {
+      "nameZh": "安卡拉",
+      "neId": 1159151255
+    },
+    "TUV": {
+      "nameZh": "富纳富提",
+      "neId": 1159149071
+    },
+    "TWN": {
+      "nameZh": "台北",
+      "neId": 1159151567
+    },
+    "TZA": {
+      "nameZh": "多多马",
+      "neId": 1159149731
+    },
+    "UGA": {
+      "nameZh": "坎帕拉",
+      "neId": 1159150593
+    },
+    "UKR": {
+      "nameZh": "基辅",
+      "neId": 1159151495
+    },
+    "XKX": {
+      "nameZh": "普里什蒂纳",
+      "neId": 1159149757
+    },
+    "URY": {
+      "nameZh": "蒙得维的亚",
+      "neId": 1159150469
+    },
+    "USA": {
+      "nameZh": "华盛顿哥伦比亚特区",
+      "neId": 1159151573
+    },
+    "UZB": {
+      "nameZh": "塔什干",
+      "neId": 1159151501
+    },
+    "VAT": {
+      "nameZh": "梵蒂冈",
+      "neId": 1159127243
+    },
+    "VCT": {
+      "nameZh": "金斯敦",
+      "neId": 1159150431
+    },
+    "VEN": {
+      "nameZh": "加拉加斯",
+      "neId": 1159151493
+    },
+    "VNM": {
+      "nameZh": "河内",
+      "neId": 1159151251
+    },
+    "VUT": {
+      "nameZh": "维拉港",
+      "neId": 1159150579
+    },
+    "WSM": {
+      "nameZh": "阿皮亚",
+      "neId": 1159151197
+    },
+    "YEM": {
+      "nameZh": "萨那",
+      "neId": 1159151259
+    },
+    "ZAF": {
+      "nameZh": "比勒陀利亚",
+      "neId": 1159150661
+    },
+    "ZMB": {
+      "nameZh": "卢萨卡",
+      "neId": 1159150571
+    },
+    "ZWE": {
+      "nameZh": "哈拉雷",
+      "neId": 1159150573
+    },
+    "NRU": {
+      "nameZh": "亚伦区",
+      "source": "https://nominatim.openstreetmap.org/lookup?osm_ids=R8384066&format=jsonv2&namedetails=1"
+    },
+    "PLW": {
+      "nameZh": "恩吉鲁穆德",
+      "source": "https://nominatim.openstreetmap.org/lookup?osm_ids=N4244310289&format=jsonv2&namedetails=1"
+    }
+  }
+}

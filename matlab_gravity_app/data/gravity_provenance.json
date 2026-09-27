@@ -3,7 +3,8 @@
   "source_url": "https://icgem.gfz-potsdam.de/getmodel/zip/c50128797a9cb62e936337c890e4425f03f0461d7329b09a8cc8561504465340/EGM2008.zip",
   "catalogue_url": "https://icgem.gfz-potsdam.de/tom_longtime",
   "reference_doi": "10.1029/2011JB008916",
-  "downloaded_at_utc": "2026-09-27T13:59:04.581750+00:00",
+  "archive_saved_at_utc": "2026-09-27T13:58:27.249580+00:00",
+  "grid_generated_at_utc": "2026-09-27T14:04:23.160001+00:00",
   "source_archive_sha256": "8cb3521f9650568a80d049bd6dd3668a4191f3ac9d741122cc0321bcc28948e3",
   "coefficient_extract_sha256": "187de6a2039df1d8637462c8defaff9daf503aa3fcad47c87c1b66dfa00a4268",
   "original_max_degree": "2190",
@@ -21,7 +22,7 @@
   "g_units": "m/s^2",
   "disturbance_units": "m/s^2",
   "definition_g": "Magnitude of model gravitational acceleration plus centrifugal acceleration",
-  "definition_disturbance": "g minus WGS84 Somigliana normal gravity at the same ellipsoidal location",
+  "definition_disturbance": "g minus WGS84 Somigliana normal gravity on the ellipsoid",
   "data_basis": "NGA EGM2008 fitted to satellite, terrestrial, airborne and altimetry-derived observations",
   "limitations": [
     "Not direct gravimeter observations at every grid point",

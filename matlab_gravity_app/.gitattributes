@@ -1,0 +1,8 @@
+*.m text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+data/*.json -text whitespace=cr-at-eol
+data/*.csv -text whitespace=cr-at-eol
+data/*.gfc -text whitespace=cr-at-eol
+*.mat binary
+*.png binary
