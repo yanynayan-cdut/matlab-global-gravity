@@ -103,7 +103,7 @@ for country in sorted((c for c in metadata if c["cca3"] in superset), key=lambda
     zh = country["translations"].get("zho", {}).get("common", country["name"]["common"])
     en = country["name"]["common"]
     aliases = " ".join(country.get("altSpellings", []))
-    rows.append({"iso3":code,"iso2":country["cca2"],"country":en,"countryZh":zh,"capital":capital,"latitude":float(lat),"longitude":float(lon),"label":f"{zh} / {en} — {capital}","search":f"{zh} {en} {capital} {code} {country['cca2']} {aliases}".lower(),"notes":special_notes.get(iso,""),"unMember":iso in un_codes,"source":source})
+    rows.append({"iso3":code,"iso2":country["cca2"],"country":en,"countryZh":zh,"capital":capital,"latitude":float(lat),"longitude":float(lon),"label":f"{zh} / {en} — {capital}","search":f"{zh} {en} {capital} {code} {country['cca2']} {aliases}".lower(),"notes":special_notes.get(iso,""),"unMember":bool(iso in un_codes),"source":source})
 
 if unmatched:
     print(json.dumps({"unmatched": unmatched}, ensure_ascii=True, indent=2))
