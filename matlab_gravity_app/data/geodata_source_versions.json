@@ -1,0 +1,13 @@
+{
+  "countries": {
+    "commit": "c8015eebdd94c533358406b0d709f441389e1f2e",
+    "date": "2026-09-03T08:44:13Z",
+    "request": "https://api.github.com/repos/mledoze/countries/commits?path=countries.json&per_page=1"
+  },
+  "ne": {
+    "commit": "9380cca83db5f9aef52d5e762765100745f84b27",
+    "date": "2022-05-13T05:33:10Z",
+    "request": "https://api.github.com/repos/nvkelso/natural-earth-vector/commits?path=geojson/ne_50m_admin_0_countries.geojson&per_page=1"
+  },
+  "ne_version": "5.2.0-pre"
+}
