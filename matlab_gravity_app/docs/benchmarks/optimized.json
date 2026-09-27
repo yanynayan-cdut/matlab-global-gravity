@@ -1,0 +1,741 @@
+{
+  "method": "Warm each app once, then open three visible figures sequentially for startup. Only one app window is alive while sampling. Startup excludes MATLAB process launch. Control tests use repeated real callbacks followed by a full drawnow; no screen capture or disk I/O is timed. Tab return is measured after each tab has already been visited. Programmatic camera angle changes plus drawnow measure redraw throughput; this is not a mouse-input latency test or a guaranteed interactive frame rate. The bundled gravity data and 197-country catalogue are shared by both versions.",
+  "configuration": {
+    "Position": [
+      30,
+      40,
+      1510,
+      880
+    ],
+    "Qualities": [
+      "balanced",
+      "fast",
+      "fine"
+    ],
+    "Repeats": 5,
+    "RotationFrames": 24,
+    "StartupRepeats": 3,
+    "Target": "optimized"
+  },
+  "environment": {
+    "matlabVersion": "9.13.0.2698988 (R2022b) Update 10",
+    "computer": "PCWIN64",
+    "timestamp": "2026-09-27 22:42:20",
+    "graphicsVisible": true,
+    "processStartupIncluded": false,
+    "openglRenderer": "NVIDIA GeForce RTX 4070 Laptop GPU/PCIe/SSE2",
+    "openglVersion": "4.6.0 NVIDIA 610.74",
+    "openglSoftware": false
+  },
+  "optimizedBalanced": {
+    "name": "optimized_balanced",
+    "quality": "balanced",
+    "startupSeconds": {
+      "samples": [
+        3.0515407,
+        2.5565098,
+        2.3342252
+      ],
+      "median": 2.5565098,
+      "min": 2.3342252,
+      "max": 3.0515407,
+      "mean": 2.6474252333333332
+    },
+    "globeScene": {
+      "axesObjectCount": 10,
+      "gravitySurfaceGridSize": [
+        93,
+        181
+      ],
+      "gravitySurfaceVertices": 16833,
+      "gravitySurfaceTriangles": 33120,
+      "surfaceObjectCount": 2,
+      "totalSurfaceVertices": 33666,
+      "totalSurfaceTriangles": 66240,
+      "boundaryVertices": 29484,
+      "capitalCount": 197,
+      "contourCoordinateElements": 8914
+    },
+    "firstMillerTabSeconds": 0.7510414,
+    "millerScene": {
+      "axesObjectCount": 8,
+      "surfaceObjectCount": 0,
+      "totalSurfaceVertices": 0,
+      "totalSurfaceTriangles": 0,
+      "boundaryVertices": 29484,
+      "capitalCount": 197,
+      "contourCoordinateElements": 16833
+    },
+    "opacity": {
+      "callbackSeconds": {
+        "samples": [
+          0.0053385,
+          0.0040026,
+          0.0025292,
+          0.0029157,
+          0.0027692
+        ],
+        "median": 0.0029157,
+        "min": 0.0025292,
+        "max": 0.0053385,
+        "mean": 0.0035110400000000009
+      },
+      "totalSeconds": {
+        "samples": [
+          0.1407028,
+          0.0793321,
+          0.1401025,
+          0.0380868,
+          0.0676741
+        ],
+        "median": 0.0793321,
+        "min": 0.0380868,
+        "max": 0.1407028,
+        "mean": 0.093179659999999984
+      }
+    },
+    "relief": {
+      "callbackSeconds": {
+        "samples": [
+          0.0094156,
+          0.0051989,
+          0.0137315,
+          0.0050723,
+          0.0044598
+        ],
+        "median": 0.0051989,
+        "min": 0.0044598,
+        "max": 0.0137315,
+        "mean": 0.00757562
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0651413,
+          0.1060991,
+          0.1144312,
+          0.0632169,
+          0.0819284
+        ],
+        "median": 0.0819284,
+        "min": 0.0632169,
+        "max": 0.1144312,
+        "mean": 0.086163380000000012
+      }
+    },
+    "fieldSwitch": {
+      "callbackSeconds": {
+        "samples": [
+          0.0371761,
+          0.0436664,
+          0.0537648,
+          0.0511464,
+          0.0437733
+        ],
+        "median": 0.0437733,
+        "min": 0.0371761,
+        "max": 0.0537648,
+        "mean": 0.0459054
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0878193,
+          0.098075,
+          0.1094446,
+          0.1002903,
+          0.0894378
+        ],
+        "median": 0.098075,
+        "min": 0.0878193,
+        "max": 0.1094446,
+        "mean": 0.0970134
+      }
+    },
+    "returnToGlobe": {
+      "callbackSeconds": {
+        "samples": [
+          0.0042659,
+          0.0035398,
+          0.0032551,
+          0.0039735,
+          0.0038273
+        ],
+        "median": 0.0038273,
+        "min": 0.0032551,
+        "max": 0.0042659,
+        "mean": 0.00377232
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0203391,
+          0.0150029,
+          0.012844,
+          0.0195435,
+          0.0188296
+        ],
+        "median": 0.0188296,
+        "min": 0.012844,
+        "max": 0.0203391,
+        "mean": 0.01731182
+      }
+    },
+    "returnToMiller": {
+      "callbackSeconds": {
+        "samples": [
+          0.0033787,
+          0.0039101,
+          0.0034892,
+          0.0032584,
+          0.0033787
+        ],
+        "median": 0.0033787,
+        "min": 0.0032584,
+        "max": 0.0039101,
+        "mean": 0.00348302
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0515746,
+          0.0561036,
+          0.0217405,
+          0.0726636,
+          0.054161
+        ],
+        "median": 0.054161,
+        "min": 0.0217405,
+        "max": 0.0726636,
+        "mean": 0.05124866
+      }
+    },
+    "automatedRotationFrameSeconds": {
+      "samples": [
+        0.062279,
+        0.0632657,
+        0.0707686,
+        0.0602614,
+        0.0547912,
+        0.0561102,
+        0.0762608,
+        0.0628125,
+        0.1073923,
+        0.0415879,
+        0.0725742,
+        0.0624479,
+        0.0627394,
+        0.0811574,
+        0.0576862,
+        0.1100002,
+        0.0331204,
+        0.0662981,
+        0.0619386,
+        0.0650178,
+        0.0591704,
+        0.0665219,
+        0.05843,
+        0.0621744
+      ],
+      "median": 0.06259365,
+      "min": 0.0331204,
+      "max": 0.1100002,
+      "mean": 0.0656169375
+    },
+    "automatedRotationRedrawsPerSecond": 15.239967576968979,
+    "finalGlobeScene": {
+      "axesObjectCount": 10,
+      "gravitySurfaceGridSize": [
+        93,
+        181
+      ],
+      "gravitySurfaceVertices": 16833,
+      "gravitySurfaceTriangles": 33120,
+      "surfaceObjectCount": 2,
+      "totalSurfaceVertices": 33666,
+      "totalSurfaceTriangles": 66240,
+      "boundaryVertices": 29484,
+      "capitalCount": 197,
+      "contourCoordinateElements": 8914
+    },
+    "calculator": {
+      "iso3": "CHN",
+      "g": 9.8014788858511679,
+      "force": 686.10352200958175,
+      "mass": 70,
+      "height": 0,
+      "latitude": 39.90172,
+      "longitude": 116.394201
+    }
+  },
+  "optimizedFast": {
+    "name": "optimized_fast",
+    "quality": "fast",
+    "startupSeconds": {
+      "samples": [
+        2.3458943,
+        2.2321893,
+        2.3532998
+      ],
+      "median": 2.3458943,
+      "min": 2.2321893,
+      "max": 2.3532998,
+      "mean": 2.3104611333333334
+    },
+    "globeScene": {
+      "axesObjectCount": 10,
+      "gravitySurfaceGridSize": [
+        48,
+        91
+      ],
+      "gravitySurfaceVertices": 4368,
+      "gravitySurfaceTriangles": 8460,
+      "surfaceObjectCount": 2,
+      "totalSurfaceVertices": 4372,
+      "totalSurfaceTriangles": 8462,
+      "boundaryVertices": 22585,
+      "capitalCount": 197,
+      "contourCoordinateElements": 2714
+    },
+    "firstMillerTabSeconds": 0.3132703,
+    "millerScene": {
+      "axesObjectCount": 8,
+      "surfaceObjectCount": 0,
+      "totalSurfaceVertices": 0,
+      "totalSurfaceTriangles": 0,
+      "boundaryVertices": 22585,
+      "capitalCount": 197,
+      "contourCoordinateElements": 4368
+    },
+    "opacity": {
+      "callbackSeconds": {
+        "samples": [
+          0.0029567,
+          0.0066852,
+          0.0030326,
+          0.0026788,
+          0.0034782
+        ],
+        "median": 0.0030326,
+        "min": 0.0026788,
+        "max": 0.0066852,
+        "mean": 0.0037663
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0463433,
+          0.1208018,
+          0.0353961,
+          0.0430178,
+          0.041119
+        ],
+        "median": 0.0430178,
+        "min": 0.0353961,
+        "max": 0.1208018,
+        "mean": 0.0573356
+      }
+    },
+    "relief": {
+      "callbackSeconds": {
+        "samples": [
+          0.004212,
+          0.0037403,
+          0.0043642,
+          0.00432,
+          0.004981
+        ],
+        "median": 0.00432,
+        "min": 0.0037403,
+        "max": 0.004981,
+        "mean": 0.0043234999999999992
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0455461,
+          0.0484225,
+          0.0505935,
+          0.0569385,
+          0.0516018
+        ],
+        "median": 0.0505935,
+        "min": 0.0455461,
+        "max": 0.0569385,
+        "mean": 0.05062048
+      }
+    },
+    "fieldSwitch": {
+      "callbackSeconds": {
+        "samples": [
+          0.0341226,
+          0.0347631,
+          0.0315798,
+          0.0314184,
+          0.0291792
+        ],
+        "median": 0.0315798,
+        "min": 0.0291792,
+        "max": 0.0347631,
+        "mean": 0.03221262
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0668054,
+          0.0667667,
+          0.0623944,
+          0.0694691,
+          0.0626741
+        ],
+        "median": 0.0667667,
+        "min": 0.0623944,
+        "max": 0.0694691,
+        "mean": 0.06562194
+      }
+    },
+    "returnToGlobe": {
+      "callbackSeconds": {
+        "samples": [
+          0.0034726,
+          0.0042899,
+          0.0047231,
+          0.0047841,
+          0.0032234
+        ],
+        "median": 0.0042899,
+        "min": 0.0032234,
+        "max": 0.0047841,
+        "mean": 0.00409862
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0197477,
+          0.0207239,
+          0.0246558,
+          0.0239531,
+          0.0212816
+        ],
+        "median": 0.0212816,
+        "min": 0.0197477,
+        "max": 0.0246558,
+        "mean": 0.022072420000000002
+      }
+    },
+    "returnToMiller": {
+      "callbackSeconds": {
+        "samples": [
+          0.0040831,
+          0.0035605,
+          0.0038274,
+          0.0032167,
+          0.0031727
+        ],
+        "median": 0.0035605,
+        "min": 0.0031727,
+        "max": 0.0040831,
+        "mean": 0.0035720799999999996
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0203757,
+          0.0210846,
+          0.0185599,
+          0.0189373,
+          0.0185913
+        ],
+        "median": 0.0189373,
+        "min": 0.0185599,
+        "max": 0.0210846,
+        "mean": 0.01950976
+      }
+    },
+    "automatedRotationFrameSeconds": {
+      "samples": [
+        0.0303741,
+        0.0333178,
+        0.0346236,
+        0.0346624,
+        0.0339343,
+        0.0359163,
+        0.0335495,
+        0.0347901,
+        0.0301289,
+        0.0331235,
+        0.0339401,
+        0.0358343,
+        0.0344543,
+        0.0331893,
+        0.0353763,
+        0.0319531,
+        0.032076,
+        0.0347372,
+        0.0335697,
+        0.034992,
+        0.0349434,
+        0.0345772,
+        0.0348696,
+        0.0347522
+      ],
+      "median": 0.03451575,
+      "min": 0.0301289,
+      "max": 0.0359163,
+      "mean": 0.03390355
+    },
+    "automatedRotationRedrawsPerSecond": 29.495436318615607,
+    "finalGlobeScene": {
+      "axesObjectCount": 10,
+      "gravitySurfaceGridSize": [
+        48,
+        91
+      ],
+      "gravitySurfaceVertices": 4368,
+      "gravitySurfaceTriangles": 8460,
+      "surfaceObjectCount": 2,
+      "totalSurfaceVertices": 4372,
+      "totalSurfaceTriangles": 8462,
+      "boundaryVertices": 22585,
+      "capitalCount": 197,
+      "contourCoordinateElements": 2714
+    },
+    "calculator": {
+      "iso3": "CHN",
+      "g": 9.8014788858511679,
+      "force": 686.10352200958175,
+      "mass": 70,
+      "height": 0,
+      "latitude": 39.90172,
+      "longitude": 116.394201
+    }
+  },
+  "optimizedFine": {
+    "name": "optimized_fine",
+    "quality": "fine",
+    "startupSeconds": {
+      "samples": [
+        2.2137269,
+        2.1919534,
+        2.2693672
+      ],
+      "median": 2.2137269,
+      "min": 2.1919534,
+      "max": 2.2693672,
+      "mean": 2.2250158333333334
+    },
+    "globeScene": {
+      "axesObjectCount": 10,
+      "gravitySurfaceGridSize": [
+        181,
+        361
+      ],
+      "gravitySurfaceVertices": 65341,
+      "gravitySurfaceTriangles": 129600,
+      "surfaceObjectCount": 2,
+      "totalSurfaceVertices": 130682,
+      "totalSurfaceTriangles": 259200,
+      "boundaryVertices": 101875,
+      "capitalCount": 197,
+      "contourCoordinateElements": 25568
+    },
+    "firstMillerTabSeconds": 0.4405917,
+    "millerScene": {
+      "axesObjectCount": 8,
+      "surfaceObjectCount": 0,
+      "totalSurfaceVertices": 0,
+      "totalSurfaceTriangles": 0,
+      "boundaryVertices": 101875,
+      "capitalCount": 197,
+      "contourCoordinateElements": 65341
+    },
+    "opacity": {
+      "callbackSeconds": {
+        "samples": [
+          0.0031498,
+          0.0025552,
+          0.0024451,
+          0.0028735,
+          0.0038513
+        ],
+        "median": 0.0028735,
+        "min": 0.0024451,
+        "max": 0.0038513,
+        "mean": 0.0029749800000000003
+      },
+      "totalSeconds": {
+        "samples": [
+          0.3621808,
+          0.0973079,
+          0.2227814,
+          0.2225614,
+          0.4017686
+        ],
+        "median": 0.2227814,
+        "min": 0.0973079,
+        "max": 0.4017686,
+        "mean": 0.26132002
+      }
+    },
+    "relief": {
+      "callbackSeconds": {
+        "samples": [
+          0.0063344,
+          0.0048537,
+          0.0062529,
+          0.0055418,
+          0.0050342
+        ],
+        "median": 0.0055418,
+        "min": 0.0048537,
+        "max": 0.0063344,
+        "mean": 0.0056034
+      },
+      "totalSeconds": {
+        "samples": [
+          0.3471088,
+          0.0710488,
+          0.2029152,
+          0.1854864,
+          0.1997749
+        ],
+        "median": 0.1997749,
+        "min": 0.0710488,
+        "max": 0.3471088,
+        "mean": 0.20126681999999999
+      }
+    },
+    "fieldSwitch": {
+      "callbackSeconds": {
+        "samples": [
+          0.0522571,
+          0.0523693,
+          0.0481791,
+          0.0544317,
+          0.0558177
+        ],
+        "median": 0.0523693,
+        "min": 0.0481791,
+        "max": 0.0558177,
+        "mean": 0.052610979999999995
+      },
+      "totalSeconds": {
+        "samples": [
+          0.1409048,
+          0.1724119,
+          0.2010268,
+          0.1826384,
+          0.225407
+        ],
+        "median": 0.1826384,
+        "min": 0.1409048,
+        "max": 0.225407,
+        "mean": 0.18447778
+      }
+    },
+    "returnToGlobe": {
+      "callbackSeconds": {
+        "samples": [
+          0.0082647,
+          0.0036103,
+          0.0048147,
+          0.0039973,
+          0.003055
+        ],
+        "median": 0.0039973,
+        "min": 0.003055,
+        "max": 0.0082647,
+        "mean": 0.0047484
+      },
+      "totalSeconds": {
+        "samples": [
+          0.0298221,
+          0.0221312,
+          0.0234141,
+          0.0157076,
+          0.0171553
+        ],
+        "median": 0.0221312,
+        "min": 0.0157076,
+        "max": 0.0298221,
+        "mean": 0.02164606
+      }
+    },
+    "returnToMiller": {
+      "callbackSeconds": {
+        "samples": [
+          0.0056421,
+          0.0039096,
+          0.0035227,
+          0.004482,
+          0.0041432
+        ],
+        "median": 0.0041432,
+        "min": 0.0035227,
+        "max": 0.0056421,
+        "mean": 0.00433992
+      },
+      "totalSeconds": {
+        "samples": [
+          0.1319603,
+          0.1344561,
+          0.1459418,
+          0.1380383,
+          0.1346573
+        ],
+        "median": 0.1346573,
+        "min": 0.1319603,
+        "max": 0.1459418,
+        "mean": 0.13701075999999998
+      }
+    },
+    "automatedRotationFrameSeconds": {
+      "samples": [
+        0.1133738,
+        0.2256961,
+        0.0324876,
+        0.1027433,
+        0.1050601,
+        0.1102804,
+        0.2071492,
+        0.0348548,
+        0.1114174,
+        0.2073617,
+        0.0323673,
+        0.1083913,
+        0.1112776,
+        0.1170496,
+        0.103567,
+        0.1056266,
+        0.1116553,
+        0.1040658,
+        0.1102183,
+        0.1071395,
+        0.1067933,
+        0.1057948,
+        0.1175269,
+        0.1057425
+      ],
+      "median": 0.1077654,
+      "min": 0.0323673,
+      "max": 0.2256961,
+      "mean": 0.11240167500000002
+    },
+    "automatedRotationRedrawsPerSecond": 8.8966645737263246,
+    "finalGlobeScene": {
+      "axesObjectCount": 10,
+      "gravitySurfaceGridSize": [
+        181,
+        361
+      ],
+      "gravitySurfaceVertices": 65341,
+      "gravitySurfaceTriangles": 129600,
+      "surfaceObjectCount": 2,
+      "totalSurfaceVertices": 130682,
+      "totalSurfaceTriangles": 259200,
+      "boundaryVertices": 101875,
+      "capitalCount": 197,
+      "contourCoordinateElements": 25568
+    },
+    "calculator": {
+      "iso3": "CHN",
+      "g": 9.8014788858511679,
+      "force": 686.10352200958175,
+      "mass": 70,
+      "height": 0,
+      "latitude": 39.90172,
+      "longitude": 116.394201
+    }
+  }
+}

@@ -140,6 +140,54 @@ end
 showTab(fig,'globe');
 end
 
+function testOpacityAndTabReuseKeepGraphicsAndView(testCase)
+fig=testCase.TestData.figure; showTab(fig,'globe');
+a=plotAxes(fig,'globe'); a.View=[41 12]; a.CameraViewAngle=14;
+surface=findobj(a,'Tag','GravitySurface'); markers=findobj(a,'Tag','CapitalMarkers');
+opacity=findobj(fig,'Tag','Opacity'); opacity.Value=0.65; invoke(opacity,'ValueChangedFcn');
+verifyTrue(testCase,isgraphics(surface)&&isgraphics(markers));
+verifyEqual(testCase,findobj(a,'Tag','GravitySurface'),surface);
+verifyEqual(testCase,a.View,[41 12],'AbsTol',1e-10);
+verifyEqual(testCase,a.CameraViewAngle,14,'AbsTol',1e-10);
+showTab(fig,'miller'); showTab(fig,'globe');
+verifyEqual(testCase,findobj(a,'Tag','GravitySurface'),surface);
+verifyEqual(testCase,findobj(a,'Tag','CapitalMarkers'),markers);
+verifyEqual(testCase,a.View,[41 12],'AbsTol',1e-10);
+verifyEqual(testCase,a.CameraViewAngle,14,'AbsTol',1e-10);
+opacity.Value=0.78; invoke(opacity,'ValueChangedFcn');
+end
+
+function testQualityChangesDisplayOnlyAcrossAllViews(testCase)
+fig=testCase.TestData.figure; dropdown=findobj(fig,'Tag','RenderQuality');
+baseline=fig.UserData; counts=zeros(1,3);
+profiles={'fast','balanced','fine'};
+for k=1:3
+    dropdown.Value=profiles{k}; invoke(dropdown,'ValueChangedFcn');
+    for name={'globe','miller','equirectangular','mercator','mollweide'}
+        showTab(fig,name{1}); a=plotAxes(fig,name{1});
+        markers=findobj(a,'Tag','CapitalMarkers');
+        verifyNumElements(testCase,markers.XData,197);
+        verifyTrue(testCase,all(isfinite(markers.XData))&&all(isfinite(markers.YData)));
+        verifyEqual(testCase,fig.UserData.g,baseline.g);
+        verifyEqual(testCase,fig.UserData.force,baseline.force);
+    end
+    showTab(fig,'globe'); a=plotAxes(fig,'globe');
+    surface=findobj(a,'Tag','GravitySurface'); counts(k)=numel(surface.CData);
+    stats=getappdata(fig,'RenderStats');
+    verifyEqual(testCase,stats.quality,profiles{k});
+    if strcmp(profiles{k},'fast')
+        verifyEqual(testCase,surface.FaceAlpha,1);
+        verifyEqual(testCase,string(get(findobj(a,'Tag','OpaqueCore'),'Visible')),"off");
+    else
+        verifyEqual(testCase,surface.FaceAlpha,0.78,'AbsTol',1e-14);
+    end
+end
+verifyGreaterThan(testCase,counts(2),counts(1));
+verifyEqual(testCase,counts(3),181*361);
+verifyLessThan(testCase,counts(2),0.27*counts(3));
+dropdown.Value='balanced'; invoke(dropdown,'ValueChangedFcn');
+end
+
 function showTab(fig,name)
 tabs=findobj(fig,'Tag','ProjectionTabs');
 tabs.SelectedTab=findobj(fig,'Tag',name);

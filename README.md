@@ -13,6 +13,8 @@ cd('matlab_gravity_app')
 gravity_field_app
 ```
 
+默认采用均衡显示。若旋转卡顿，可用 `gravity_field_app('RenderQuality','fast')` 启动流畅档，或在界面上方切换“显示质量”；精细档可恢复完整 1° 显示网格。三档的 197 个首都和重力计算精度相同。详见 [渲染性能说明](matlab_gravity_app/PERFORMANCE.md)。
+
 - 三维球面支持旋转和缩放，以 `jet` 分级色带、等值线和可调径向起伏显示重力；透明度可调，国界沿曲面绘制。
 - 二维视图包括 Miller 圆柱、等距圆柱、Mercator 和 Mollweide 等面积投影。
 - 197 个首都以红点标出，可在图中点击或按中英文国家名、首都名及 ISO 代码搜索。

@@ -1,0 +1,244 @@
+{
+  "method": "Warm each app once, then open three visible figures sequentially for startup. Only one app window is alive while sampling. Startup excludes MATLAB process launch. Control tests use repeated real callbacks followed by a full drawnow; no screen capture or disk I/O is timed. Tab return is measured after each tab has already been visited. Programmatic camera angle changes plus drawnow measure redraw throughput; this is not a mouse-input latency test or a guaranteed interactive frame rate. The bundled gravity data and 197-country catalogue are shared by both versions.",
+  "environment": {
+    "matlabVersion": "9.13.0.2698988 (R2022b) Update 10",
+    "computer": "PCWIN64",
+    "timestamp": "2026-09-27 22:31:08",
+    "graphicsVisible": true,
+    "processStartupIncluded": false,
+    "openglRenderer": "NVIDIA GeForce RTX 4070 Laptop GPU/PCIe/SSE2",
+    "openglVersion": "4.6.0 NVIDIA 610.74",
+    "openglSoftware": false
+  },
+  "baseline": {
+    "name": "baseline_b8fdcb8",
+    "quality": "",
+    "startupSeconds": {
+      "samples": [
+        3.3440827,
+        2.5646495,
+        2.3586061
+      ],
+      "median": 2.5646495,
+      "min": 2.3586061,
+      "max": 3.3440827,
+      "mean": 2.7557794333333328
+    },
+    "globeScene": {
+      "axesObjectCount": 10,
+      "gravitySurfaceGridSize": [
+        181,
+        361
+      ],
+      "gravitySurfaceVertices": 65341,
+      "gravitySurfaceTriangles": 129600,
+      "surfaceObjectCount": 2,
+      "boundaryVertices": 101875,
+      "capitalCount": 197,
+      "contourCoordinateElements": 25568
+    },
+    "firstMillerTabSeconds": 0.9997346,
+    "millerScene": {
+      "axesObjectCount": 8,
+      "surfaceObjectCount": 0,
+      "boundaryVertices": 101875,
+      "capitalCount": 197,
+      "contourCoordinateElements": 65341
+    },
+    "opacity": {
+      "callbackSeconds": {
+        "samples": [
+          0.2801207,
+          0.2556756,
+          0.2658115,
+          0.2363083,
+          0.2391256
+        ],
+        "median": 0.2556756,
+        "min": 0.2363083,
+        "max": 0.2801207,
+        "mean": 0.25540833999999996
+      },
+      "totalSeconds": {
+        "samples": [
+          0.7912999,
+          0.5331936,
+          0.5298872,
+          0.4887439,
+          0.3073124
+        ],
+        "median": 0.5298872,
+        "min": 0.3073124,
+        "max": 0.7912999,
+        "mean": 0.5300874
+      }
+    },
+    "relief": {
+      "callbackSeconds": {
+        "samples": [
+          0.3157455,
+          0.2396688,
+          0.3012614,
+          0.2775147,
+          0.2464635
+        ],
+        "median": 0.2775147,
+        "min": 0.2396688,
+        "max": 0.3157455,
+        "mean": 0.27613078
+      },
+      "totalSeconds": {
+        "samples": [
+          0.6109006,
+          0.3101695,
+          0.5951629,
+          0.5287162,
+          0.5022522
+        ],
+        "median": 0.5287162,
+        "min": 0.3101695,
+        "max": 0.6109006,
+        "mean": 0.50944028
+      }
+    },
+    "fieldSwitch": {
+      "callbackSeconds": {
+        "samples": [
+          0.2488142,
+          0.2913897,
+          0.2480983,
+          0.2543673,
+          0.2566199
+        ],
+        "median": 0.2543673,
+        "min": 0.2480983,
+        "max": 0.2913897,
+        "mean": 0.25985788
+      },
+      "totalSeconds": {
+        "samples": [
+          0.6519096,
+          0.5458722,
+          0.4785135,
+          0.5101055,
+          0.4913745
+        ],
+        "median": 0.5101055,
+        "min": 0.4785135,
+        "max": 0.6519096,
+        "mean": 0.53555506
+      }
+    },
+    "returnToGlobe": {
+      "callbackSeconds": {
+        "samples": [
+          0.290351,
+          0.2731994,
+          0.277725,
+          0.350293,
+          0.2928506
+        ],
+        "median": 0.290351,
+        "min": 0.2731994,
+        "max": 0.350293,
+        "mean": 0.2968838
+      },
+      "totalSeconds": {
+        "samples": [
+          0.5870104,
+          0.5335924,
+          0.549716,
+          0.6388317,
+          0.5748847
+        ],
+        "median": 0.5748847,
+        "min": 0.5335924,
+        "max": 0.6388317,
+        "mean": 0.57680704
+      }
+    },
+    "returnToMiller": {
+      "callbackSeconds": {
+        "samples": [
+          0.3136301,
+          0.3310634,
+          0.3442022,
+          0.3475505,
+          0.3602009
+        ],
+        "median": 0.3442022,
+        "min": 0.3136301,
+        "max": 0.3602009,
+        "mean": 0.33932942
+      },
+      "totalSeconds": {
+        "samples": [
+          0.6105544,
+          0.5962908,
+          0.6119001,
+          0.6012946,
+          0.6391722
+        ],
+        "median": 0.6105544,
+        "min": 0.5962908,
+        "max": 0.6391722,
+        "mean": 0.61184242
+      }
+    },
+    "automatedRotationFrameSeconds": {
+      "samples": [
+        0.1311789,
+        0.1272457,
+        0.1294663,
+        0.1336945,
+        0.1305534,
+        0.1462526,
+        0.1238867,
+        0.1295137,
+        0.120011,
+        0.1399206,
+        0.1335518,
+        0.1537851,
+        0.1160152,
+        0.1421694,
+        0.1269144,
+        0.1402416,
+        0.1234516,
+        0.1279264,
+        0.1230465,
+        0.1258766,
+        0.1107397,
+        0.1370977,
+        0.1328842,
+        0.1341058
+      ],
+      "median": 0.13003355,
+      "min": 0.1107397,
+      "max": 0.1537851,
+      "mean": 0.130813725
+    },
+    "automatedRotationRedrawsPerSecond": 7.6444577967640637,
+    "finalGlobeScene": {
+      "axesObjectCount": 10,
+      "gravitySurfaceGridSize": [
+        181,
+        361
+      ],
+      "gravitySurfaceVertices": 65341,
+      "gravitySurfaceTriangles": 129600,
+      "surfaceObjectCount": 2,
+      "boundaryVertices": 101875,
+      "capitalCount": 197,
+      "contourCoordinateElements": 25568
+    },
+    "calculator": {
+      "iso3": "CHN",
+      "g": 9.8014788858511679,
+      "force": 686.10352200958175,
+      "mass": 70,
+      "height": 0,
+      "latitude": 39.90172,
+      "longitude": 116.394201
+    }
+  }
+}
