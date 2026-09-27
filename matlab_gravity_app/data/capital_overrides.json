@@ -1,0 +1,26 @@
+{
+  "NIU": {
+    "capital": "Alofi",
+    "latitude": -19.0534159,
+    "longitude": -169.919199,
+    "source": "OpenStreetMap Nominatim, https://nominatim.openstreetmap.org/search?q=Alofi%2C+Niue&format=jsonv2&limit=1",
+    "osm_type": "relation",
+    "osm_id": 1558549
+  },
+  "NRU": {
+    "capital": "Yaren",
+    "latitude": -0.5471064,
+    "longitude": 166.9163479,
+    "source": "OpenStreetMap Nominatim, https://nominatim.openstreetmap.org/search?q=Yaren%2C+Nauru&format=jsonv2&limit=1",
+    "osm_type": "relation",
+    "osm_id": 8384066
+  },
+  "PLW": {
+    "capital": "Ngerulmud",
+    "latitude": 7.5006446,
+    "longitude": 134.6242864,
+    "source": "OpenStreetMap Nominatim, https://nominatim.openstreetmap.org/search?q=Ngerulmud%2C+Palau&format=jsonv2&limit=1",
+    "osm_type": "node",
+    "osm_id": 4244310289
+  }
+}

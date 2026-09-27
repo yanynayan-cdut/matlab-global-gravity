@@ -1,0 +1,40 @@
+{
+  "model": "EGM2008",
+  "source_url": "https://icgem.gfz-potsdam.de/getmodel/zip/c50128797a9cb62e936337c890e4425f03f0461d7329b09a8cc8561504465340/EGM2008.zip",
+  "catalogue_url": "https://icgem.gfz-potsdam.de/tom_longtime",
+  "reference_doi": "10.1029/2011JB008916",
+  "downloaded_at_utc": "2026-09-27T13:59:04.581750+00:00",
+  "source_archive_sha256": "8cb3521f9650568a80d049bd6dd3668a4191f3ac9d741122cc0321bcc28948e3",
+  "coefficient_extract_sha256": "187de6a2039df1d8637462c8defaff9daf503aa3fcad47c87c1b66dfa00a4268",
+  "original_max_degree": "2190",
+  "retained_degree_order": 180,
+  "coefficient_count": 16469,
+  "normalization": "fully_normalized (4pi); no Condon-Shortley phase",
+  "tide_system": "tide_free",
+  "grid_shape": [
+    181,
+    361
+  ],
+  "grid_spacing_degrees": 1,
+  "coordinates": "WGS84 geodetic latitude and longitude",
+  "height_reference": "WGS84 ellipsoid; grid h=0 m",
+  "g_units": "m/s^2",
+  "disturbance_units": "m/s^2",
+  "definition_g": "Magnitude of model gravitational acceleration plus centrifugal acceleration",
+  "definition_disturbance": "g minus WGS84 Somigliana normal gravity at the same ellipsoidal location",
+  "data_basis": "NGA EGM2008 fitted to satellite, terrestrial, airborne and altimetry-derived observations",
+  "limitations": [
+    "Not direct gravimeter observations at every grid point",
+    "Truncated at degree/order 180 (~111 km half wavelength); not local terrain-scale gravity",
+    "Grid is at ellipsoidal height zero, not terrain or geoid surface",
+    "Displayed relief is an exaggerated encoding of the field, not Earth topography"
+  ],
+  "range_g": [
+    9.778531496391574,
+    9.832460841328471
+  ],
+  "range_disturbance_mgal": [
+    -256.0594413411721,
+    257.76227632512416
+  ]
+}
