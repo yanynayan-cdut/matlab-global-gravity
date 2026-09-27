@@ -6,3 +6,5 @@ data/*.csv -text whitespace=cr-at-eol
 data/*.gfc -text whitespace=cr-at-eol
 *.mat binary
 *.png binary
+# Preserve downloaded response bytes for reproducible SHA-256 verification.
+data/terrain_raw/* -text -diff

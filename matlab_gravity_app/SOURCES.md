@@ -22,3 +22,15 @@
 - 来源版本、特殊首都处理、许可证及文件校验值：`data/DATA_PROVENANCE.md`。
 
 图下注明模型、180 阶次、1° 网格、椭球面零高度、Natural Earth 比例尺与来源站点。径向夸张和透明度只影响显示，不修改原系数或受力计算。
+
+## 地表 / 海底高程与离心量
+
+- 高程：NOAA NCEI ETOPO 2022 v1 Ice Surface；DOI **10.25921/fd45-gt74**。
+- 产品页：https://www.ncei.noaa.gov/products/etopo-global-relief-model
+- 全球显示采样自官方 60 角秒源；197 个首都独立采样自 15 角秒源。
+- 海洋保留原海底负高程；极地使用冰面产品，不是冰下基岩产品。
+- 高程 H 相对 EGM2008 大地水准面。配套 geoid 提供 N；计算使用 `h=H+N+Δh`。
+- 离心加速度采用 WGS84 常量，`a_c=ω²(ν+h)cosφ`；个人离心力 `F_c=m*a_c`。这一项已经包含在有效重力 g 中，不再对 G 二次加减。
+- WGS84 官方定义与常量：https://earth-info.nga.mil/index.php?dir=wgs84&action=wgs84
+- 全球离心缓存绑定源文件 SHA-256、模型常量和高度口径；源数据或算法改变后重建。
+- 完整数据引用、接口地址、采样口径、5 个海岸首都邻近陆地估计及限制见 [terrain_sources.md](data/terrain_sources.md)，每条下载响应及校验值见 `data/terrain_raw/manifest.json`。

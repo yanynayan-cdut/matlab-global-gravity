@@ -1,0 +1,107 @@
+{
+  "generated_at_utc": "2026-09-27T15:53:30.876741+00:00",
+  "dataset": "NOAA NCEI ETOPO2022 v1 Ice Surface + accompanying EGM2008 geoid; 60s global / 15s capitals",
+  "source_doi": "10.25921/fd45-gt74",
+  "official_product_url": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+  "official_user_guide_url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/docs/1.2%20ETOPO%202022%20User%20Guide.pdf",
+  "vertical_datum": "EGM2008 gravity-related height, EPSG:3855; metres positive up",
+  "horizontal_datum": "WGS84 EPSG:4326, geodetic latitude/longitude in degrees",
+  "height_conversion": "h_WGS84 = H_ETOPO2022 + N_geoid (user guide section 2.2)",
+  "geoid_source": "ETOPO accompanying EGM2008 grid derived from NGA egm08_25.gtx (2.5 arc-minute source), resampled by NOAA",
+  "ocean_policy": "Original negative seabed values retained. Surface means ice surface in Greenland/Antarctica; ocean points represent seafloor.",
+  "license": "ETOPO user guide section 4: freely usable for private, academic and commercial purposes; cite NOAA NCEI (2022), DOI above. Geoid metadata: Derived from work by NGA. Public Domain.",
+  "global_method": "Bilinear interpolation of four 60-arc-second cell centers surrounding each exact integer-degree interior point. Periodic longitude seam duplicated. At each geographic pole use the longitudinal mean of the nearest source row, sampled every degree.",
+  "capital_method": "Bilinear interpolation at canonical coordinates. Only user-approved BHS/COK/MDV/MHL/NRU use the nearest strictly positive ETOPO 15s source cell within the local 6x6-cell window and 1.5 km distance limit. No other negative capital is relocated. Zero cells are excluded. Original values/coordinates are retained.",
+  "capital_warning": "15 arc seconds is about 460 m at the equator and does not guarantee city-site height accuracy. Relocated values are estimates for nearby valid land cells; their sampling distances are stored in capitalElevationSampleDistanceM.",
+  "global_grid_shape": [
+    181,
+    361
+  ],
+  "capital_count": 197,
+  "global_queries": {
+    "surface": [
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc.dods?z[59:60:10739][59:60:21599]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc.dods?z[59:60:10739][0:60:21540]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc.dods?z[60:60:10740][59:60:21599]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc.dods?z[60:60:10740][0:60:21540]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc.dods?z[0:1:0][0:60:21540]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc.dods?z[10799:1:10799][0:60:21540]"
+    ],
+    "geoid": [
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_geoid_netcdf/ETOPO_2022_v1_60s_N90W180_geoid.nc.dods?z[59:60:10739][59:60:21599]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_geoid_netcdf/ETOPO_2022_v1_60s_N90W180_geoid.nc.dods?z[59:60:10739][0:60:21540]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_geoid_netcdf/ETOPO_2022_v1_60s_N90W180_geoid.nc.dods?z[60:60:10740][59:60:21599]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_geoid_netcdf/ETOPO_2022_v1_60s_N90W180_geoid.nc.dods?z[60:60:10740][0:60:21540]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_geoid_netcdf/ETOPO_2022_v1_60s_N90W180_geoid.nc.dods?z[0:1:0][0:60:21540]",
+      "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_geoid_netcdf/ETOPO_2022_v1_60s_N90W180_geoid.nc.dods?z[10799:1:10799][0:60:21540]"
+    ]
+  },
+  "request_manifest": "terrain_raw/manifest.json",
+  "request_manifest_sha256": "d83035eb6e805641260375302e709f79995cd86d3b441236230dae8e1fcc223a",
+  "request_hash_definition": "SHA256 of decoded HTTP response body; each exact DAP query and retrieval time is in the manifest",
+  "geography_input_sha256": "7d43433ab6eb0f12d3a197b21c463502b69c3a2c01978617a1c6cf59ca3bde3b",
+  "terrain_data_sha256": "029788865d4c4b47b2865565f6fc1b312606ccb398d3a530694ceb55e848c617",
+  "capital_diagnostics_sha256": "bf94be4af285c277b159686c0fa803d20098a3dd303c642eb1a30a3608798f5c",
+  "ranges_m": {
+    "global_elevation": [
+      -9236.609375,
+      5903.9136962890625
+    ],
+    "global_geoid": [
+      -106.51546478271484,
+      84.60737037658691
+    ],
+    "capital_raw_elevation": [
+      -156.051548770371,
+      2813.4449217908864
+    ],
+    "capital_effective_elevation": [
+      1.1070031991896099,
+      2813.4449217908864
+    ]
+  },
+  "capital_negative_flags": [
+    {
+      "iso3": "BHS",
+      "capital": "Nassau",
+      "raw_elevation_m": -5.475225088004121,
+      "effective_elevation_m": 8.0,
+      "sample_distance_m": 310.94031757536607,
+      "nearest_cell_m": -10.0
+    },
+    {
+      "iso3": "COK",
+      "capital": "Avarua",
+      "raw_elevation_m": -126.54497833787457,
+      "effective_elevation_m": 1.5159542560577393,
+      "sample_distance_m": 651.3095913564579,
+      "nearest_cell_m": -41.947879791259766
+    },
+    {
+      "iso3": "MDV",
+      "capital": "Malé",
+      "raw_elevation_m": -12.31289267434866,
+      "effective_elevation_m": 5.762622356414795,
+      "sample_distance_m": 194.4768471748262,
+      "nearest_cell_m": 5.762622356414795
+    },
+    {
+      "iso3": "MHL",
+      "capital": "Majuro",
+      "raw_elevation_m": -8.5743389521005,
+      "effective_elevation_m": 2.014774799346924,
+      "sample_distance_m": 337.71989667803047,
+      "nearest_cell_m": -2.0
+    },
+    {
+      "iso3": "NRU",
+      "capital": "Yaren",
+      "raw_elevation_m": -156.051548770371,
+      "effective_elevation_m": 4.340112209320068,
+      "sample_distance_m": 281.87637255454354,
+      "nearest_cell_m": -345.0
+    }
+  ],
+  "capital_effective_estimate_count": 5,
+  "capital_geoid_policy": "Calculator retains canonical capital latitude/longitude and locally sampled capitalGeoidM; H is explicitly a nearby-land estimate for five capitals. Sample-coordinate N is additionally stored in capitalSampleGeoidM for provenance."
+}

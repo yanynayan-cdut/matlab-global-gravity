@@ -1,5 +1,5 @@
 function fig = gravity_field_app(varargin)
-%GRAVITY_FIELD_APP EGM2008 gravity, capital search and force calculator.
+%GRAVITY_FIELD_APP Gravity, terrain, rotation fields and capital calculator.
 %   gravity_field_app opens the application. Base MATLAB R2022b or later.
 %   f=gravity_field_app('Visible','off') is useful for automated validation.
 %   gravity_field_app('RenderQuality','fast') favors smooth interaction.
@@ -14,6 +14,7 @@ parse(parser,varargin{:});
 root = fileparts(mfilename('fullpath'));
 geo = load(fullfile(root,'data','world_geodata.mat'));
 field = load(fullfile(root,'data','gravity_grid.mat'));
+[environment,environmentCache]=load_surface_environment();
 assert(field.degree==180,'The bundled calculator uses EGM2008 degree 180; rebuild a matching grid.');
 countries = geo.countries;
 countrySet=parser.Results.CountrySet;
@@ -39,6 +40,10 @@ labels = {countries.label};
 selected = find(strcmp({countries.iso3},'CHN'),1);
 if isempty(selected), selected=1; end
 capitalLat = [countries.latitude]; capitalLon = [countries.longitude];
+[foundCapital,capitalEnvironmentIndex]=ismember({countries.iso3},cellstr(environment.capitalIso3));
+assert(all(foundCapital),'Terrain data must include every selected capital.');
+assert(isequal(double(environment.lat(:)),lat) && isequal(double(environment.lon(:)'),lon), ...
+    'Terrain and gravity display grids must match.');
 boundaryLat = double(geo.boundaryLatitude(:));
 boundaryLon = double(geo.boundaryLongitude(:));
 % A discontinuity cannot be drawn across the antimeridian in a flat map.
@@ -49,22 +54,22 @@ plotHandles = struct();
 scenes=cell(1,5);
 geometryCache=struct(); fieldCache=struct();
 
-fig = uifigure('Name','全球重力场 · EGM2008','Position',parser.Results.Position, ...
+fig = uifigure('Name','全球重力场 · EGM2008 / ETOPO 2022','Position',parser.Results.Position, ...
     'Visible',parser.Results.Visible,'Color',[0.96 0.97 0.98],'Tag','GravityApp');
 outer = uigridlayout(fig,[2 2]);
 outer.ColumnWidth = {'1x',340}; outer.RowHeight = {52,'1x'};
 outer.Padding = [14 12 14 12]; outer.ColumnSpacing = 14;
 header = uigridlayout(outer,[2 1]); header.Layout.Column=[1 2];
 header.Padding=[0 0 0 0]; header.RowHeight={29,19}; header.RowSpacing=0;
-uilabel(header,'Text','全球重力场  /  EGM2008','FontSize',23,'FontWeight','bold');
-uilabel(header,'Text','实测融合模型 · 197 国首都 · 半透明起伏球面 · 多种二维投影','FontSize',12,'FontColor',[0.3 0.35 0.42]);
+uilabel(header,'Text','全球重力场与地表环境','FontSize',23,'FontWeight','bold');
+uilabel(header,'Text','EGM2008 · NOAA ETOPO 2022 · 地表高程与离心量 · 197 国首都','FontSize',12,'FontColor',[0.3 0.35 0.42]);
 left = uigridlayout(outer,[4 1]); left.Padding=[0 0 0 0];
 left.RowHeight={57,'1x',40,50}; left.RowSpacing=6;
 control = uigridlayout(left,[2 6]); control.Padding=[0 0 0 0];
 control.RowHeight={20,26}; control.ColumnWidth={65,160,65,'1x',65,'1x'};
 uilabel(control,'Text','显示量');
-mode = uidropdown(control,'Items',{'重力扰动 δg (mGal)','总重力 g (m/s²)'}, ...
-    'ItemsData',{'disturbance','gravity'},'Value','disturbance','Tag','FieldMode');
+mode = uidropdown(control,'Items',{'重力扰动 δg (mGal)','总重力 g (m/s²)','地表 / 海底高程 (m)','离心力 / 加速度'}, ...
+    'ItemsData',{'disturbance','gravity','elevation','centrifugal'},'Value','disturbance','Tag','FieldMode');
 uilabel(control,'Text','径向夸张');
 relief = uislider(control,'Limits',[0 0.3],'Value',0.16, ...
     'MajorTicks',[],'MinorTicks',[],'Tag','Relief');
@@ -76,8 +81,12 @@ quality=uidropdown(control,'Items',{'流畅 · 4°','均衡 · 2°','精细 · 1
     'ItemsData',{'fast','balanced','fine'}, ...
     'Value',validatestring(parser.Results.RenderQuality,{'fast','balanced','fine'}), ...
     'Tag','RenderQuality','Tooltip','只改变显示细节；原始数据和180阶重力计算不变。流畅档用预合成透明效果。');
-displayNote = uilabel(control,'Text','','FontSize',11,'FontColor',[0.32 0.36 0.4]);
-displayNote.Layout.Column=[3 6];
+uilabel(control,'Text','离心图单位');
+centrifugalUnit=uidropdown(control,'Items',{'加速度 (m/s²)','当前质量离心力 (N)'}, ...
+    'ItemsData',{'acceleration','force'},'Value','acceleration','Enable','off','Tag','CentrifugalUnit', ...
+    'Tooltip','全球离心图在源地表/海底高程上计算；个人相对高程只影响右侧计算器。');
+displayNote = uilabel(control,'Text','','FontSize',10,'WordWrap','on','FontColor',[0.32 0.36 0.4]);
+displayNote.Layout.Column=[5 6];
 tabs = uitabgroup(left,'Tag','ProjectionTabs');
 tabTitles = {'三维球面','Miller 圆柱','等距圆柱','Mercator 圆柱','Mollweide 等面积'};
 projections = {'globe','miller','equirectangular','mercator','mollweide'};
@@ -90,13 +99,12 @@ for k=1:5
     axesList(k).Toolbar.Visible='on';
 end
 selectionLabel=uilabel(left,'Text','','FontSize',12,'WordWrap','on','Tag','SelectionLabel');
-sourceLabel=uilabel(left,'Text',sprintf(['数据：ICGEM / NGA EGM2008，180 阶次，1° 网格，WGS84 椭球面 h=0；国界：Natural Earth 1:50m。\n' ...
-    '来源：icgem.gfz-potsdam.de | naturalearthdata.com | github.com/mledoze/countries；显示可抽稀，计算用完整180阶模型；起伏不是地形。']), ...
-    'FontSize',10,'WordWrap','on','FontColor',[0.33 0.37 0.42],'Tag','Sources'); %#ok<NASGU>
+sourceLabel=uilabel(left,'Text','','FontSize',10,'WordWrap','on', ...
+    'FontColor',[0.33 0.37 0.42],'Tag','Sources');
 
 side = uipanel(outer,'Title','首都定位与重力计算','FontWeight','bold','BackgroundColor',[1 1 1]);
-right = uigridlayout(side,[15 1]); right.Padding=[12 10 12 10]; right.RowSpacing=6;
-right.RowHeight={20,30,20,120,42,23,30,23,30,35,36,'1x',27,27,24};
+right = uigridlayout(side,[16 1]); right.Padding=[12 10 12 10]; right.RowSpacing=6;
+right.RowHeight={20,30,20,100,76,23,30,23,30,34,32,40,'1x',27,27,24};
 uilabel(right,'Text','搜索国家 / 首都 / ISO 代码','FontWeight','bold');
 search = uieditfield(right,'text','Placeholder','中国 / Beijing / CHN', ...
     'Tag','CountrySearch','ValueChangingFcn',@searchChanging,'ValueChangedFcn',@searchChanged);
@@ -107,11 +115,13 @@ coordinates=uilabel(right,'Text','','WordWrap','on','Tag','Coordinates');
 uilabel(right,'Text','质量 m (kg，日常所说的体重)');
 mass=uieditfield(right,'numeric','Value',70,'Limits',[0 100000],'Tag','Mass', ...
     'ValueChangedFcn',@calculate);
-uilabel(right,'Text','海拔 H (m)');
+uilabel(right,'Text','相对高程 Δh (m，相对当地地表)','Tag','AltitudeLabel');
 height=uieditfield(right,'numeric','Value',0,'Limits',[-500 10000],'Tag','Altitude', ...
-    'ValueChangedFcn',@calculate);
-uilabel(right,'Text','近似取椭球高 h = H，未加入大地水准面高 N。','WordWrap','on','FontSize',11);
+    'ValueChangedFcn',@calculate,'Tooltip','0 表示位于当地地表；正值为地表以上，负值为地下。');
+uilabel(right,'Text','计算高度：h = 地表海拔 + 相对高程 + 大地水准面高 N。','WordWrap','on','FontSize',11);
 forceLabel=uilabel(right,'Text','','FontSize',22,'FontWeight','bold','FontColor',[0.05 0.29 0.5],'Tag','Force');
+centrifugalLabel=uilabel(right,'Text','','FontSize',12,'FontWeight','bold', ...
+    'FontColor',[0.36 0.2 0.08],'Tag','CentrifugalForce');
 results=uitextarea(right,'Editable','off','FontSize',11,'Tag','Calculation');
 uibutton(right,'Text','计算 G = m × g','ButtonPushedFcn',@calculate,'Tag','Calculate');
 uibutton(right,'Text','定位所选首都 / 重置视角','ButtonPushedFcn',@focusCapital);
@@ -121,7 +131,9 @@ mode.ValueChangedFcn=@refreshPlot;
 relief.ValueChangedFcn=@refreshPlot;
 opacity.ValueChangedFcn=@refreshPlot;
 quality.ValueChangedFcn=@refreshPlot;
+centrifugalUnit.ValueChangedFcn=@refreshPlot;
 tabs.SelectionChangedFcn=@refreshPlot;
+setappdata(fig,'EnvironmentCache',environmentCache);
 updateCountry(); refreshPlot(); calculate();
 
     function searchChanging(~,event)
@@ -163,30 +175,69 @@ updateCountry(); refreshPlot(); calculate();
     end
     function updateCountry()
         c=countries(selected);
-        coordinates.Text=sprintf('%s\n纬度 %.4f°，经度 %.4f°',capitalName(c),c.latitude,c.longitude);
+        e=capitalEnvironmentIndex(selected);
+        [samplingNote,~,~]=capitalSamplingNote(e);
+        coordinates.Text=sprintf('%s\n纬度 %.4f°，经度 %.4f°\n地表海拔 H_s = %.1f m（ETOPO）\n%s', ...
+            capitalName(c),c.latitude,c.longitude,environment.capitalElevationM(e),samplingNote);
+        coordinates.Tooltip=samplingNote;
         selectionLabel.Text=sprintf('所选：%s  |  %s  |  纬度 %.4f°，经度 %.4f°', ...
             c.countryZh,capitalName(c),c.latitude,c.longitude);
+    end
+    function [note,distance,nearbyEstimate]=capitalSamplingNote(e)
+        distance=0; nearbyEstimate=false;
+        if isfield(environment,'capitalElevationIsEstimate')
+            nearbyEstimate=logical(environment.capitalElevationIsEstimate(e));
+        end
+        if nearbyEstimate
+            distance=double(environment.capitalElevationSampleDistanceM(e));
+            note=sprintf('邻近陆地估计 · 采样距离 %.0f m',distance);
+        else
+            note='15″栅格插值估计 · 非现场测量';
+        end
     end
     function calculate(~,~)
         c=countries(selected);
         try
-            [local,detail]=gravity_at_location(c.latitude,c.longitude,height.Value);
+            e=capitalEnvironmentIndex(selected);
+            surfaceElevation=environment.capitalElevationM(e);
+            geoid=environment.capitalGeoidM(e);
+            [samplingNote,samplingDistance,nearbyEstimate]=capitalSamplingNote(e);
+            totalAltitude=surfaceElevation+height.Value;
+            ellipsoidalHeight=environment.capitalHSurface(e)+height.Value;
+            [local,detail]=gravity_at_location(c.latitude,c.longitude,ellipsoidalHeight);
+            centrifugalAcceleration=environment.capitalAcSurface(e)+environment.capitalAcHeightSlope(e)*height.Value;
+            centrifugalForce=mass.Value*centrifugalAcceleration;
             force=mass.Value*local;
             assert(isfinite(force)&&force>=0,'Invalid force from model.');
             forceLabel.Text=sprintf('G = %.4f N',force);
+            centrifugalLabel.Text=sprintf('离心加速度 a_c = %.9f m/s²\n离心力 F_c = %.6f N', ...
+                centrifugalAcceleration,centrifugalForce);
             results.Value={sprintf('%s / %s',c.countryZh,capitalName(c)), ...
                 sprintf('φ = %.5f°；λ = %.5f°',c.latitude,c.longitude), ...
-                sprintf('m = %.3f kg；H = %.2f m',mass.Value,height.Value), ...
+                sprintf('m = %.3f kg；相对高程 Δh = %.2f m',mass.Value,height.Value), ...
+                sprintf('地表海拔 H_s = %.2f m；N = %.2f m',surfaceElevation,geoid), ...
+                samplingNote, ...
+                sprintf('总海拔 H = %.2f m；椭球高 h = %.2f m',totalAltitude,ellipsoidalHeight), ...
                 sprintf('g = %.8f m/s²',local), ...
                 sprintf('正常重力 γ = %.8f m/s²',detail.normalGravity), ...
                 sprintf('δg = %.3f mGal',detail.disturbance*1e5), ...
-                'EGM2008 180 阶；包含地球自转', ...
-                'h≈H；结果为模型估计，非当地直接观测。', c.notes};
+                sprintf('离心加速度 a_c = %.9f m/s²',centrifugalAcceleration), ...
+                sprintf('离心力 F_c = %.6f N（向外远离自转轴）',centrifugalForce), ...
+                'g 已含离心项，G=m*g 不再重复加减 F_c。', ...
+                '地表高程为栅格估计，不能代替现场测量。', c.notes};
             status.Text='点击红点选择首都；拖动球面旋转。';
             fig.UserData=struct('iso3',c.iso3,'g',local,'force',force,'mass',mass.Value, ...
-                'height',height.Value,'latitude',c.latitude,'longitude',c.longitude);
+                'height',height.Value,'relativeHeight',height.Value,'surfaceElevation',surfaceElevation, ...
+                'geoidUndulation',geoid,'altitude',totalAltitude,'ellipsoidalHeight',ellipsoidalHeight, ...
+                'centrifugalAcceleration',centrifugalAcceleration,'centrifugalForce',centrifugalForce, ...
+                'elevationSampleDistance',samplingDistance,'elevationNearbyEstimate',nearbyEstimate, ...
+                'latitude',c.latitude,'longitude',c.longitude);
+            if strcmp(mode.Value,'centrifugal') && strcmp(centrifugalUnit.Value,'force')
+                refreshPlot();
+            end
         catch errorInfo
             forceLabel.Text='计算失败'; results.Value={errorInfo.message};
+            centrifugalLabel.Text='离心力计算失败';
             status.Text='请检查数据文件；不会退回模拟重力场。';
         end
     end
@@ -198,30 +249,62 @@ updateCountry(); refreshPlot(); calculate();
     end
     function amplitude=radialAmplitude()
         amplitude=relief.Value;
-        if strcmp(mode.Value,'gravity')
+        if any(strcmp(mode.Value,{'gravity','centrifugal'}))
             % Total g has a strong smooth latitude gradient. Apply only 10%
             % of the slider amplitude (at most +/-3%) to retain a globe.
             % The radial ordering and colors still use true total gravity.
             amplitude=0.1*amplitude;
+        elseif strcmp(mode.Value,'elevation')
+            amplitude=0.25*amplitude;
         end
     end
     function D=getRenderData()
         key=[quality.Value '_' mode.Value];
-        if isfield(fieldCache,key), D=fieldCache.(key); return; end
+        mapMass=NaN;
+        if strcmp(mode.Value,'centrifugal')
+            key=[key '_' centrifugalUnit.Value];
+            if strcmp(centrifugalUnit.Value,'force'), mapMass=mass.Value; end
+        end
+        if isfield(fieldCache,key)
+            D=fieldCache.(key);
+            if isequaln(D.mapMass,mapMass), return; end
+        end
         q=quality.Value;
         if ~isfield(geometryCache,q)
             geometryCache.(q)=gravity_display_geometry(lat,lon,grav,boundaryLat,boundaryLon,q);
         end
         geometry=geometryCache.(q);
-        if strcmp(mode.Value,'gravity')
-            fullValues=grav; unit='g (m/s²)'; center=(min(grav(:))+max(grav(:)))/2;
-        else
-            fullValues=disturbance*1e5; unit='δg (mGal)'; center=0;
+        switch mode.Value
+            case 'gravity'
+                fullValues=grav; unit='g (m/s²)'; center=(min(grav(:))+max(grav(:)))/2;
+                plotTitle='EGM2008 · 总重力';
+            case 'disturbance'
+                fullValues=disturbance*1e5; unit='δg (mGal)'; center=0;
+                plotTitle='EGM2008 · 重力扰动';
+            case 'elevation'
+                fullValues=double(environment.elevationM); unit='地表 / 海底高程 (m)'; center=0;
+                plotTitle='NOAA ETOPO 2022 · 地表 / 海底高程';
+            case 'centrifugal'
+                fullValues=double(environment.acSurface);
+                unit='a_c (m/s²)'; plotTitle='地表 / 海底离心加速度';
+                if strcmp(centrifugalUnit.Value,'force')
+                    fullValues=fullValues*mapMass; unit='F_c (N)';
+                    plotTitle=sprintf('地表 / 海底离心力 · m = %.4g kg',mapMass);
+                end
+                center=(min(fullValues(:))+max(fullValues(:)))/2;
         end
-        D=struct('key',key,'quality',q,'lat',geometry.lat,'lon',geometry.lon, ...
+        dataKey=key;
+        if isfinite(mapMass), dataKey=sprintf('%s_m%.17g',key,mapMass); end
+        limits=[min(fullValues(:)) max(fullValues(:))];
+        span=max(abs(fullValues(:)-center));
+        if span==0
+            % A zero-mass force map is a real constant-zero field. A narrow
+            % color interval keeps contourf/colorbar valid without fake data.
+            span=1; limits=center+[-1 1]*1e-6;
+        end
+        D=struct('key',dataKey,'quality',q,'lat',geometry.lat,'lon',geometry.lon, ...
             'values',fullValues(geometry.rowIndex,geometry.columnIndex),'unit',unit, ...
-            'center',center,'span',max(abs(fullValues(:)-center)), ...
-            'limits',[min(fullValues(:)) max(fullValues(:))], ...
+            'center',center,'span',span,'limits',limits,'mapMass',mapMass,'title',plotTitle, ...
             'boundaryLat',geometry.boundaryLatitude,'boundaryLon',geometry.boundaryLongitude, ...
             'stats',geometry.metadata,'stride',geometry.stride);
         D.levels=linspace(D.limits(1),D.limits(2),19);
@@ -242,6 +325,11 @@ updateCountry(); refreshPlot(); calculate();
         fieldCache.(key)=D;
     end
     function refreshPlot(~,~)
+        if strcmp(mode.Value,'centrifugal')
+            centrifugalUnit.Enable='on';
+        else
+            centrifugalUnit.Enable='off';
+        end
         index=find(tabList==tabs.SelectedTab,1);
         D=getRenderData();
         if isempty(scenes{index}), scenes{index}=createScene(index,D); end
@@ -255,7 +343,7 @@ updateCountry(); refreshPlot(); calculate();
         if newField
             clim(scene.axes,D.limits);
             scene.colorbar.Label.String=D.unit;
-            title(scene.axes,sprintf('EGM2008 · %s',D.unit),'FontSize',14,'FontWeight','normal');
+            title(scene.axes,D.title,'FontSize',14,'FontWeight','normal');
         end
         if newField || newOpacity
             alpha=opacity.Value;
@@ -277,21 +365,40 @@ updateCountry(); refreshPlot(); calculate();
         scene.key=D.key; scene.relief=relief.Value; scene.opacity=opacity.Value;
         scenes{index}=scene; plotHandles=scene;
         updateMarker();
-        transparency='真实透明';
-        if strcmp(D.quality,'fast'), transparency='预合成透明（减轻显卡负担）'; end
-        displayNote.Text=sprintf('显示 %d° · 国界 %d 点 · %s · 半径起伏 ±%.1f%%', ...
-            D.stride,D.stats.displayBoundaryVertices,transparency,100*radialAmplitude());
-        if strcmp(mode.Value,'gravity')
-            relief.Tooltip='总重力：实际半径幅度为滑块值的10%，最大±3%；颜色与半径仍按真实g映射。';
-        else
-            relief.Tooltip='重力扰动：实际半径幅度等于滑块值，最大±30%；用于夸张地区差异。';
+        transparency='真透明';
+        if strcmp(D.quality,'fast'), transparency='预合成透明'; end
+        displayNote.Text=sprintf('%d° · 起伏 ±%.1f%% · %s',D.stride,100*radialAmplitude(),transparency);
+        displayNote.Tooltip=sprintf('原数据1°；显示%d°；国界%d点。显示起伏不改变物理数据。', ...
+            D.stride,D.stats.displayBoundaryVertices);
+        switch mode.Value
+            case {'gravity','centrifugal'}
+                relief.Tooltip='实际半径幅度为滑块值的10%，最大±3%；避免大尺度梯度使球面整体拉长。';
+            case 'elevation'
+                relief.Tooltip='实际半径幅度为滑块值的25%，最大±7.5%；颜色是原高程，半径是夸张的地形示意。';
+            otherwise
+                relief.Tooltip='重力扰动：实际半径幅度等于滑块值，最大±30%；用于夸张地区差异。';
         end
+        updateSources();
         stats=D.stats; stats.quality=D.quality; stats.key=D.key;
         stats.projection=scene.projection; stats.sourceGridSpacing=1;
         stats.displayGridSpacing=D.stride;
         stats.radialAmplitude=radialAmplitude();
         stats.fitRadius=1+stats.radialAmplitude+0.035;
+        stats.fieldMode=mode.Value; stats.centrifugalUnit=centrifugalUnit.Value;
         setappdata(fig,'RenderStats',stats);
+    end
+    function updateSources()
+        switch mode.Value
+            case 'elevation'
+                sourceLabel.Text=sprintf(['高程：NOAA NCEI ETOPO 2022 Ice Surface，陆地海拔与海底负高程；1°显示采样，径向地形作夸张。\n' ...
+                    '来源：www.ncei.noaa.gov/products/etopo-global-relief-model；国界：Natural Earth 1:50m。首都高程另取细网格。']);
+            case 'centrifugal'
+                sourceLabel.Text=sprintf(['离心量：a_c = ω²(ν+h)cosφ，h = ETOPO高程 + 大地水准面高N；地表/海底Δh=0，结果已缓存。\n' ...
+                    '高程来源：NOAA ETOPO 2022；WGS84自转常数。个人相对高程仅影响右侧计算器；g已经包含离心项。']);
+            otherwise
+                sourceLabel.Text=sprintf(['重力：ICGEM / NGA EGM2008，180阶，1°网格，WGS84椭球面h=0；右侧按当地地表及相对高程计算。\n' ...
+                    '来源：icgem.gfz-potsdam.de；高程：NOAA ETOPO 2022；国界：Natural Earth 1:50m。重力模式凹凸不是地形。']);
+        end
     end
     function scene=createScene(index,D)
         a=axesList(index); p=projections{index}; hold(a,'on');
@@ -342,7 +449,7 @@ updateCountry(); refreshPlot(); calculate();
             if strcmp(p,'mercator')
                 xlabel(a,'Mercator：纬度限制在 ±85°，两极不在图内');
             else
-                xlabel(a,'红点：197 国首都；线：国界；色带：重力等值分级');
+                xlabel(a,'红点：197 国首都；线：国界；色带：所选物理量等值分级');
             end
             a.Interactions=[panInteraction zoomInteraction];
         end
