@@ -1,0 +1,92 @@
+[
+  {
+    "quality": "balanced",
+    "slider": 0.16,
+    "effectiveAmplitude": 0.016,
+    "radiusRange": [
+      0.98400126290411272,
+      1.016
+    ],
+    "axisRatio": 1.0312782642505858,
+    "gRange": [
+      9.7785336247538091,
+      9.8324608413284711
+    ],
+    "cameraSpan": 1.051
+  },
+  {
+    "quality": "balanced",
+    "slider": 0.3,
+    "effectiveAmplitude": 0.03,
+    "radiusRange": [
+      0.97000236794521133,
+      1.03
+    ],
+    "axisRatio": 1.0594418463824697,
+    "gRange": [
+      9.7785336247538091,
+      9.8324608413284711
+    ],
+    "cameraSpan": 1.0650000000000002
+  },
+  {
+    "quality": "fast",
+    "slider": 0.16,
+    "effectiveAmplitude": 0.016,
+    "radiusRange": [
+      0.98454362512207028,
+      1.016
+    ],
+    "axisRatio": 1.0323809024552619,
+    "gRange": [
+      9.7794476634767147,
+      9.8324608413284711
+    ],
+    "cameraSpan": 1.051
+  },
+  {
+    "quality": "fast",
+    "slider": 0.3,
+    "effectiveAmplitude": 0.03,
+    "radiusRange": [
+      0.971019297103882,
+      1.03
+    ],
+    "axisRatio": 1.0604312940753036,
+    "gRange": [
+      9.7794476634767147,
+      9.8324608413284711
+    ],
+    "cameraSpan": 1.0650000000000002
+  },
+  {
+    "quality": "fine",
+    "slider": 0.16,
+    "effectiveAmplitude": 0.016,
+    "radiusRange": [
+      0.9840000000000001,
+      1.016
+    ],
+    "axisRatio": 1.0312725522452006,
+    "gRange": [
+      9.7785314963915742,
+      9.8324608413284711
+    ],
+    "cameraSpan": 1.051
+  },
+  {
+    "quality": "fine",
+    "slider": 0.3,
+    "effectiveAmplitude": 0.03,
+    "radiusRange": [
+      0.97,
+      1.03
+    ],
+    "axisRatio": 1.0593210619680355,
+    "gRange": [
+      9.7785314963915742,
+      9.8324608413284711
+    ],
+    "cameraSpan": 1.0650000000000002
+  }
+]

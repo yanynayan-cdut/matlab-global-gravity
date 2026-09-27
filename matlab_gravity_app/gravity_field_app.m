@@ -194,7 +194,16 @@ updateCountry(); refreshPlot(); calculate();
         tabs.SelectedTab=tabList(1);
         currentView=[countries(selected).longitude+90 countries(selected).latitude];
         refreshPlot();
-        fitCamera(axesList(1),1+relief.Value+0.035);
+        fitCamera(axesList(1),1+radialAmplitude()+0.035);
+    end
+    function amplitude=radialAmplitude()
+        amplitude=relief.Value;
+        if strcmp(mode.Value,'gravity')
+            % Total g has a strong smooth latitude gradient. Apply only 10%
+            % of the slider amplitude (at most +/-3%) to retain a globe.
+            % The radial ordering and colors still use true total gravity.
+            amplitude=0.1*amplitude;
+        end
     end
     function D=getRenderData()
         key=[quality.Value '_' mode.Value];
@@ -270,19 +279,29 @@ updateCountry(); refreshPlot(); calculate();
         updateMarker();
         transparency='真实透明';
         if strcmp(D.quality,'fast'), transparency='预合成透明（减轻显卡负担）'; end
-        displayNote.Text=sprintf('显示 %d° / 原数据 1° · 国界 %d 点 · %s', ...
-            D.stride,D.stats.displayBoundaryVertices,transparency);
+        displayNote.Text=sprintf('显示 %d° · 国界 %d 点 · %s · 半径起伏 ±%.1f%%', ...
+            D.stride,D.stats.displayBoundaryVertices,transparency,100*radialAmplitude());
+        if strcmp(mode.Value,'gravity')
+            relief.Tooltip='总重力：实际半径幅度为滑块值的10%，最大±3%；颜色与半径仍按真实g映射。';
+        else
+            relief.Tooltip='重力扰动：实际半径幅度等于滑块值，最大±30%；用于夸张地区差异。';
+        end
         stats=D.stats; stats.quality=D.quality; stats.key=D.key;
         stats.projection=scene.projection; stats.sourceGridSpacing=1;
         stats.displayGridSpacing=D.stride;
+        stats.radialAmplitude=radialAmplitude();
+        stats.fitRadius=1+stats.radialAmplitude+0.035;
         setappdata(fig,'RenderStats',stats);
     end
     function scene=createScene(index,D)
         a=axesList(index); p=projections{index}; hold(a,'on');
         a.FontSize=11; a.Color=[0.98 0.99 1];
         scene=struct('axes',a,'projection',p,'key','', ...
-            'relief',NaN,'opacity',NaN,'fitRadius',1+relief.Value+0.035);
+            'relief',NaN,'opacity',NaN,'fitRadius',1+radialAmplitude()+0.035);
         if strcmp(p,'globe')
+            % Native zoom narrows XYZ limits; clip at the screen rectangle
+            % instead of cutting away the front of the sphere at those limits.
+            a.ClippingStyle='rectangle';
             scene.core=surf(a,zeros(2),zeros(2),zeros(2), ...
                 'FaceColor',[0.78 0.82 0.86],'EdgeColor','none', ...
                 'HitTest','off','PickableParts','none','Tag','OpaqueCore');
@@ -333,29 +352,33 @@ updateCountry(); refreshPlot(); calculate();
     function scene=updateGeometry(scene,D)
         a=scene.axes; p=scene.projection;
         if strcmp(p,'globe')
-            r=1+relief.Value*D.normalized;
+            amplitude=radialAmplitude();
+            r=1+amplitude*D.normalized;
             set(scene.field,'XData',D.gx.*r,'YData',D.gy.*r,'ZData',D.gz.*r,'CData',D.values);
             if strcmp(D.quality,'fast')
                 set(scene.core,'XData',zeros(2),'YData',zeros(2),'ZData',zeros(2),'Visible','off');
             else
                 set(scene.core,'XData',D.gx.*(r-0.003),'YData',D.gy.*(r-0.003),'ZData',D.gz.*(r-0.003));
             end
-            r=1+relief.Value*D.bn+0.009;
+            r=1+amplitude*D.bn+0.009;
             set(scene.boundaries,'XData',D.bx.*r,'YData',D.by.*r,'ZData',D.bz.*r);
             set(scene.halo,'XData',D.bx.*r,'YData',D.by.*r,'ZData',D.bz.*r);
-            r=1+relief.Value*D.tn+0.004;
+            r=1+amplitude*D.tn+0.004;
             set(scene.contours,'XData',D.tx.*r,'YData',D.ty.*r,'ZData',D.tz.*r);
-            r=1+relief.Value*D.cn+0.016;
+            r=1+amplitude*D.cn+0.016;
             x=D.cx.*r; y=D.cy.*r; z=D.cz.*r;
             set(scene.capitals,'XData',x,'YData',y,'ZData',z);
             scene.capitalXYZ=[x(:) y(:) z(:)];
-            rlim=1+relief.Value+0.035;
+            rlim=1+amplitude+0.035;
             if rlim~=scene.fitRadius
-                offset=a.CameraPosition-a.CameraTarget;
-                a.CameraPosition=a.CameraTarget+offset*(rlim/scene.fitRadius);
+                % Native zoom changes limits. Scale the current limits so
+                % relief updates preserve that zoom, then keep the same
+                % automatic camera model used by native rotation.
+                scale=rlim/scene.fitRadius;
+                a.XLim=a.XLim*scale; a.YLim=a.YLim*scale; a.ZLim=a.ZLim*scale;
+                a.CameraTargetMode='auto'; a.CameraPositionMode='auto';
                 scene.fitRadius=rlim;
             end
-            xlim(a,[-rlim rlim]); ylim(a,[-rlim rlim]); zlim(a,[-rlim rlim]);
         else
             valid=true(size(D.lat));
             if strcmp(p,'mercator'), valid=abs(D.lat)<=85; end
@@ -374,12 +397,16 @@ updateCountry(); refreshPlot(); calculate();
     end
     function fitCamera(a,rlim)
         a.Projection='orthographic'; a.DataAspectRatio=[1 1 1]; a.PlotBoxAspectRatio=[1 1 1];
-        a.CameraTarget=[0 0 0];
-        az=currentView(1); el=currentView(2);
-        direction=[sind(az)*cosd(el),-cosd(az)*cosd(el),sind(el)];
-        a.CameraPosition=direction*(rlim/tand(10));
-        a.CameraUpVector=[0 0 1]; a.CameraViewAngle=20;
         xlim(a,[-rlim rlim]); ylim(a,[-rlim rlim]); zlim(a,[-rlim rlim]);
+        % Native rotation writes View and restores the automatic camera
+        % distance. Fit with that same distance so the first drag cannot
+        % silently zoom out. Change the view angle to retain the large globe.
+        view(a,currentView);
+        a.CameraTarget=[0 0 0];
+        a.CameraPositionMode='auto';
+        distance=norm(a.CameraPosition-a.CameraTarget);
+        a.CameraUpVector=[0 0 1];
+        a.CameraViewAngle=2*atand(rlim/distance);
         axis(a,'vis3d');
     end
 

@@ -123,6 +123,49 @@ verifyEqual(testCase,fig.UserData.g,state0.g,'AbsTol',1e-14);
 mode.Value='disturbance'; invoke(mode,'ValueChangedFcn');
 end
 
+function testTotalGravityRetainsNearSphericalShape(testCase)
+fig=testCase.TestData.figure; showTab(fig,'globe');
+a=plotAxes(fig,'globe'); mode=findobj(fig,'Tag','FieldMode');
+quality=findobj(fig,'Tag','RenderQuality'); relief=findobj(fig,'Tag','Relief');
+baseline=fig.UserData;
+mode.Value='gravity'; invoke(mode,'ValueChangedFcn');
+for profile={'fast','balanced','fine'}
+    quality.Value=profile{1}; invoke(quality,'ValueChangedFcn');
+    surface=findobj(a,'Tag','GravitySurface'); originalColors=surface.CData;
+    for strength=[0 0.16 0.3]
+        relief.Value=strength; invoke(relief,'ValueChangedFcn');
+        radius=sqrt(surface.XData.^2+surface.YData.^2+surface.ZData.^2);
+        verifyGreaterThanOrEqual(testCase,min(radius(:)),0.97-1e-12);
+        verifyLessThanOrEqual(testCase,max(radius(:)),1.03+1e-12);
+        widths=[max(surface.XData(:))-min(surface.XData(:)), ...
+            max(surface.YData(:))-min(surface.YData(:)),max(surface.ZData(:))-min(surface.ZData(:))];
+        verifyLessThan(testCase,max(widths)/min(widths),1.07);
+        if strength==0
+            verifyEqual(testCase,radius,ones(size(radius)),'AbsTol',1e-12);
+        else
+            verifyGreaterThan(testCase,max(radius(:))-min(radius(:)),0.02);
+            [~,order]=sort(surface.CData(:));
+            verifyGreaterThanOrEqual(testCase,min(diff(radius(order))),-1e-12);
+        end
+        verifyEqual(testCase,surface.CData,originalColors);
+        verifyEqual(testCase,fig.UserData.g,baseline.g);
+        verifyEqual(testCase,fig.UserData.force,baseline.force);
+        verifyEqual(testCase,a.DataAspectRatio,[1 1 1]);
+        for overlay={'CountryBoundaries',0.009;'CapitalMarkers',0.016;'GravityContours',0.004}'
+            item=findobj(a,'Tag',overlay{1});
+            overlayRadius=sqrt(item.XData.^2+item.YData.^2+item.ZData.^2)-overlay{2};
+            overlayRadius=overlayRadius(isfinite(overlayRadius));
+            verifyGreaterThanOrEqual(testCase,min(overlayRadius),0.97-1e-12);
+            verifyLessThanOrEqual(testCase,max(overlayRadius),1.03+1e-12);
+        end
+        a.View=a.View+[30 5]; drawnow;
+        verifyEqual(testCase,sqrt(surface.XData.^2+surface.YData.^2+surface.ZData.^2),radius,'AbsTol',1e-12);
+    end
+end
+relief.Value=0.16; mode.Value='disturbance'; quality.Value='balanced';
+invoke(mode,'ValueChangedFcn');
+end
+
 function testAllProjectionTabsRender(testCase)
 fig=testCase.TestData.figure;
 names={'globe','miller','equirectangular','mercator','mollweide'};
@@ -186,6 +229,73 @@ verifyGreaterThan(testCase,counts(2),counts(1));
 verifyEqual(testCase,counts(3),181*361);
 verifyLessThan(testCase,counts(2),0.27*counts(3));
 dropdown.Value='balanced'; invoke(dropdown,'ValueChangedFcn');
+end
+
+function testRotationPreservesGlobeScaleAndZoom(testCase)
+fig=testCase.TestData.figure; showTab(fig,'globe');
+a=plotAxes(fig,'globe'); dropdown=findobj(fig,'Tag','RenderQuality');
+focus=findobj(fig,'Text','定位所选首都 / 重置视角');
+for profile={'fast','balanced','fine'}
+    dropdown.Value=profile{1}; invoke(dropdown,'ValueChangedFcn');
+    for zoomFactor=[1 1.35]
+        invoke(focus,'ButtonPushedFcn');
+        camzoom(a,zoomFactor); drawnow;
+        before=cameraSpan(a); originalView=a.View;
+        for offset=[30 10;-95 -20;150 35]'
+            % Native rotate interactions update View, which resets the
+            % position/target/up-vector modes to automatic in R2022b.
+            a.View=originalView+offset'; drawnow;
+            verifyEqual(testCase,cameraSpan(a),before,'RelTol',1e-10);
+        end
+        camorbit(a,20,10,'data',[0 0 1]); drawnow;
+        verifyEqual(testCase,cameraSpan(a),before,'RelTol',1e-10);
+        showTab(fig,'miller'); showTab(fig,'globe');
+        verifyEqual(testCase,cameraSpan(a),before,'RelTol',1e-10);
+    end
+end
+dropdown.Value='balanced'; invoke(dropdown,'ValueChangedFcn');
+invoke(focus,'ButtonPushedFcn');
+end
+
+function span=cameraSpan(a)
+% Orthographic camera's visible half-span in data units. A change means
+% unwanted apparent zoom even when CameraViewAngle itself stays unchanged.
+span=norm(a.CameraPosition-a.CameraTarget)*tand(a.CameraViewAngle/2);
+end
+
+function testNativeLimitsZoomSurvivesReliefAndRotation(testCase)
+fig=testCase.TestData.figure; showTab(fig,'globe');
+a=plotAxes(fig,'globe'); dropdown=findobj(fig,'Tag','RenderQuality');
+mode=findobj(fig,'Tag','FieldMode'); relief=findobj(fig,'Tag','Relief');
+focus=findobj(fig,'Text','定位所选首都 / 重置视角');
+invoke(focus,'ButtonPushedFcn');
+% R2022b toolbar/wheel zoom changes the limits, unlike camzoom.
+a.XLim=a.XLim/1.4; a.YLim=a.YLim/1.4; a.ZLim=a.ZLim/1.4;
+a.CameraPositionMode='auto'; a.CameraTargetMode='auto'; drawnow;
+relativeSpan=cameraSpan(a)/displayRadius(fig);
+for profile={'fast','balanced','fine'}
+    dropdown.Value=profile{1}; invoke(dropdown,'ValueChangedFcn');
+    verifyEqual(testCase,cameraSpan(a)/displayRadius(fig),relativeSpan,'RelTol',1e-10);
+    for field={'gravity','disturbance'}
+        mode.Value=field{1}; invoke(mode,'ValueChangedFcn');
+        verifyEqual(testCase,cameraSpan(a)/displayRadius(fig),relativeSpan,'RelTol',1e-10);
+        for value=[0 0.3 0.16]
+            relief.Value=value; invoke(relief,'ValueChangedFcn');
+            before=cameraSpan(a);
+            verifyEqual(testCase,before/displayRadius(fig),relativeSpan,'RelTol',1e-10);
+            a.View=a.View+[25 -5]; drawnow;
+            verifyEqual(testCase,cameraSpan(a),before,'RelTol',1e-10);
+        end
+    end
+end
+dropdown.Value='balanced'; invoke(dropdown,'ValueChangedFcn');
+invoke(focus,'ButtonPushedFcn');
+verifyEqual(testCase,cameraSpan(a),displayRadius(fig),'RelTol',1e-10);
+end
+
+function radius=displayRadius(fig)
+stats=getappdata(fig,'RenderStats');
+radius=stats.fitRadius;
 end
 
 function showTab(fig,name)
