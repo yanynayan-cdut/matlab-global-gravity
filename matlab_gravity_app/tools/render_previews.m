@@ -4,7 +4,7 @@ root=fileparts(fileparts(mfilename('fullpath')));
 addpath(root);
 out=fullfile(root,'artifacts');
 if ~isfolder(out), mkdir(out); end
-f=gravity_field_app('CountrySet','proposed197');
+f=gravity_field_app;
 cleanup=onCleanup(@()delete(f)); %#ok<NASGU>
 tabs=findobj(f,'Tag','ProjectionTabs');
 names={'globe','miller','equirectangular','mercator','mollweide'};

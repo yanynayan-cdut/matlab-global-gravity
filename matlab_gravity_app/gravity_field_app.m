@@ -5,7 +5,8 @@ function fig = gravity_field_app(varargin)
 parser = inputParser;
 addParameter(parser,'Visible','on');
 addParameter(parser,'Position',[30 40 1510 880]);
-addParameter(parser,'CountrySet','');
+% Approved catalogue: UN193 + Holy See, Palestine, Cook Islands and Niue.
+addParameter(parser,'CountrySet','un197');
 parse(parser,varargin{:});
 root = fileparts(mfilename('fullpath'));
 geo = load(fullfile(root,'data','world_geodata.mat'));
@@ -13,18 +14,9 @@ field = load(fullfile(root,'data','gravity_grid.mat'));
 assert(field.degree==180,'The bundled calculator uses EGM2008 degree 180; rebuild a matching grid.');
 countries = geo.countries;
 countrySet=parser.Results.CountrySet;
-if isempty(countrySet)
-    if strcmp(parser.Results.Visible,'off')
-        error('gravity:CountrySet','Specify CountrySet for a noninteractive preview.');
-    end
-    answer=questdlg(['197 国名单采用 193 个联合国成员国 + 梵蒂冈、巴勒斯坦、库克群岛、纽埃？' ...
-        '如需其他名单，请取消并指定 CountrySet 为 197 个 ISO3 代码。'], ...
-        '选择国家名单口径','采用此名单','取消','取消');
-    if ~strcmp(answer,'采用此名单'), fig=[]; return; end
-    countrySet='proposed197';
-end
+if isempty(countrySet), countrySet='un197'; end
 if ischar(countrySet) || isstring(countrySet) && isscalar(countrySet)
-    assert(strcmp(countrySet,'proposed197'),'Unknown country catalogue option.');
+    assert(any(strcmp(countrySet,{'un197','proposed197'})),'Unknown country catalogue option.');
     ids=cellstr(geo.recommended197Iso3);
 else
     ids=cellstr(countrySet);
@@ -132,6 +124,8 @@ updateCountry(); refreshPlot(); calculate();
         query=lower(strtrim(char(query)));
         matches=arrayfun(@(c)isempty(query)||contains(lower(c.search),query) ...
             ||contains(lower(c.label),query),countries);
+        exactCodes=strcmpi({countries.iso3},query)|strcmpi({countries.iso2},query);
+        if any(exactCodes), matches=exactCodes; end
         ids=find(matches);
         countLabel.Text=sprintf('%d / 197 个国家',numel(ids));
         if isempty(ids)

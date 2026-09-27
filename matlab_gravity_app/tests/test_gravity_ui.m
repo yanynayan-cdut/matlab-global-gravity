@@ -7,7 +7,7 @@ function setupOnce(testCase)
 root=fileparts(fileparts(mfilename('fullpath')));
 addpath(root);
 testCase.TestData.root=root;
-testCase.TestData.figure=gravity_field_app('Visible','off','CountrySet','proposed197');
+testCase.TestData.figure=gravity_field_app('Visible','off');
 drawnow;
 end
 
@@ -25,6 +25,13 @@ search=findobj(fig,'Tag','CountrySearch');
 search.Value=''; invoke(search,'ValueChangedFcn');
 verifyNumElements(testCase,list.Items,197);
 verifyNumElements(testCase,unique(list.ItemsData),197);
+% The approved additional records must be present in the default set.
+for query={'VAT','PSE','COK','NIU'}
+    search.Value=query{1}; invoke(search,'ValueChangedFcn');
+    verifyNumElements(testCase,list.Items,1);
+    verifyEqual(testCase,fig.UserData.iso3,query{1});
+end
+search.Value=''; invoke(search,'ValueChangedFcn');
 showTab(fig,'globe');
 axesHandle=plotAxes(fig,'globe');
 markers=findobj(axesHandle,'Tag','CapitalMarkers');

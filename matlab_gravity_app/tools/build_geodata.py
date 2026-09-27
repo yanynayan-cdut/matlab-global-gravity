@@ -146,7 +146,7 @@ output={"boundaries":structs(boundaries),"boundaryLatitude":all_lat,"boundaryLon
 # MATLAB R2021a rejects certain short UTF-8 struct strings emitted by SciPy's
 # v5 MAT writer. Finalize countries through native jsondecode/save below.
 savemat(ROOT / "world_geodata.mat", output, do_compression=True)
-(ROOT / "countries_superset.json").write_text(json.dumps({"selectionPending":True,"recommended197Iso3":sorted(recommended),"countries":rows},ensure_ascii=False,indent=2)+"\n",encoding="utf8")
+(ROOT / "countries_superset.json").write_text(json.dumps({"selectionPending":False,"recommended197Iso3":sorted(recommended),"countries":rows},ensure_ascii=False,indent=2)+"\n",encoding="utf8")
 with (ROOT / "countries_superset.csv").open("w",encoding="utf-8-sig",newline="") as handle:
     writer=csv.DictWriter(handle,fieldnames=list(rows[0])); writer.writeheader(); writer.writerows(rows)
 assert len({r["iso3"] for r in rows}) == len(rows)
