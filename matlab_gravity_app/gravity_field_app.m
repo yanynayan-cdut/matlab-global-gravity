@@ -53,6 +53,8 @@ currentView = [205 23];
 plotHandles = struct();
 scenes=cell(1,5);
 geometryCache=struct(); fieldCache=struct();
+refreshing=false; updatingColors=false; closing=false;
+pendingColorIndex=[]; colorTimer=[];
 
 fig = uifigure('Name','全球重力场 · EGM2008 / ETOPO 2022','Position',parser.Results.Position, ...
     'Visible',parser.Results.Visible,'Color',[0.96 0.97 0.98],'Tag','GravityApp');
@@ -98,7 +100,12 @@ for k=1:5
     axesList(k).FontSize=11;
     axesList(k).Toolbar.Visible='on';
 end
-selectionLabel=uilabel(left,'Text','','FontSize',12,'WordWrap','on','Tag','SelectionLabel');
+selectionRow=uigridlayout(left,[1 2]); selectionRow.Padding=[0 0 0 0];
+selectionRow.ColumnWidth={'1x',225};
+selectionLabel=uilabel(selectionRow,'Text','','FontSize',12,'WordWrap','on','Tag','SelectionLabel');
+localColorScale=uicheckbox(selectionRow,'Text','二维离心图：自动局部色标', ...
+    'Value',true,'Enable','off','Tag','LocalColorScale','ValueChangedFcn',@refreshPlot, ...
+    'Tooltip','缩放/平移后按当前视窗重分色带；关闭后固定全球范围。只调显示，原始网格分辨率不变。');
 sourceLabel=uilabel(left,'Text','','FontSize',10,'WordWrap','on', ...
     'FontColor',[0.33 0.37 0.42],'Tag','Sources');
 
@@ -133,6 +140,9 @@ opacity.ValueChangedFcn=@refreshPlot;
 quality.ValueChangedFcn=@refreshPlot;
 centrifugalUnit.ValueChangedFcn=@refreshPlot;
 tabs.SelectionChangedFcn=@refreshPlot;
+colorTimer=timer('ExecutionMode','singleShot','StartDelay',0.15,'BusyMode','drop', ...
+    'Name','GravityViewportColors','Tag','GravityViewportTimer','TimerFcn',@finishViewportChange);
+fig.DeleteFcn=@closeViewportUpdater;
 setappdata(fig,'EnvironmentCache',environmentCache);
 updateCountry(); refreshPlot(); calculate();
 
@@ -325,12 +335,23 @@ updateCountry(); refreshPlot(); calculate();
         fieldCache.(key)=D;
     end
     function refreshPlot(~,~)
+        pendingColorIndex=[];
+        if ~isempty(colorTimer) && isvalid(colorTimer) && strcmp(colorTimer.Running,'on')
+            stop(colorTimer);
+        end
+        refreshing=true;
+        refreshCleanup=onCleanup(@finishRefresh); %#ok<NASGU>
         if strcmp(mode.Value,'centrifugal')
             centrifugalUnit.Enable='on';
         else
             centrifugalUnit.Enable='off';
         end
         index=find(tabList==tabs.SelectedTab,1);
+        if index>1 && strcmp(mode.Value,'centrifugal')
+            localColorScale.Enable='on';
+        else
+            localColorScale.Enable='off';
+        end
         D=getRenderData();
         if isempty(scenes{index}), scenes{index}=createScene(index,D); end
         scene=scenes{index};
@@ -363,6 +384,7 @@ updateCountry(); refreshPlot(); calculate();
             colormap(scene.axes,palette);
         end
         scene.key=D.key; scene.relief=relief.Value; scene.opacity=opacity.Value;
+        scene.globalLimits=D.limits; scene.unit=D.unit; scene.fieldMode=mode.Value;
         scenes{index}=scene; plotHandles=scene;
         updateMarker();
         transparency='真透明';
@@ -378,7 +400,6 @@ updateCountry(); refreshPlot(); calculate();
             otherwise
                 relief.Tooltip='重力扰动：实际半径幅度等于滑块值，最大±30%；用于夸张地区差异。';
         end
-        updateSources();
         stats=D.stats; stats.quality=D.quality; stats.key=D.key;
         stats.projection=scene.projection; stats.sourceGridSpacing=1;
         stats.displayGridSpacing=D.stride;
@@ -386,6 +407,92 @@ updateCountry(); refreshPlot(); calculate();
         stats.fitRadius=1+stats.radialAmplitude+0.035;
         stats.fieldMode=mode.Value; stats.centrifugalUnit=centrifugalUnit.Value;
         setappdata(fig,'RenderStats',stats);
+        applyViewportColors(index);
+    end
+    function finishRefresh()
+        refreshing=false;
+    end
+    function queueViewportChange(index)
+        if closing || refreshing || updatingColors || ~isgraphics(fig) ...
+                || tabs.SelectedTab~=tabList(index) || isempty(scenes{index}) ...
+                || ~strcmp(mode.Value,'centrifugal') || ~localColorScale.Value
+            return
+        end
+        pendingColorIndex=index;
+        % Defer expensive contour regeneration until a short pause in native
+        % zoom/pan. XLim and YLim often change separately during one gesture.
+        if strcmp(colorTimer.Running,'on'), stop(colorTimer); end
+        start(colorTimer);
+    end
+    function finishViewportChange(~,~)
+        if closing || ~isgraphics(fig) || isempty(pendingColorIndex), return; end
+        index=pendingColorIndex; pendingColorIndex=[];
+        if tabs.SelectedTab~=tabList(index) || refreshing, return; end
+        applyViewportColors(index);
+    end
+    function applyViewportColors(index)
+        if closing || updatingColors || isempty(scenes{index}), return; end
+        updatingColors=true;
+        colorCleanup=onCleanup(@finishColorUpdate); %#ok<NASGU>
+        scene=scenes{index}; a=scene.axes;
+        limits=scene.globalLimits;
+        info=struct('mode','global','limits',limits,'sampleCount',0);
+        adaptive=index>1 && strcmp(scene.fieldMode,'centrifugal') && localColorScale.Value;
+        if adaptive
+            [limits,info]=gravity_viewport_color_limits(scene.plotX,scene.plotY,scene.plotZ, ...
+                a.XLim,a.YLim,scene.globalLimits);
+            if isempty(limits)
+                % A pan into the blank projection margin contains no field.
+                % Keep the last valid scale, without assigning fake values.
+                limits=a.CLim; info.limits=limits;
+            end
+        end
+        if ~isequal(a.CLim,limits), a.CLim=limits; end
+        if index>1
+            levels=linspace(limits(1),limits(2),19);
+            if adaptive
+                % contourf leaves values below its lowest level unfilled.
+                % Global guard levels saturate outside the local range and
+                % prevent small edge/interpolation errors from making holes.
+                levels=unique([scene.globalLimits(1),levels,scene.globalLimits(2)]);
+            end
+            if ~isequal(scene.field.LevelList,levels), scene.field.LevelList=levels; end
+        end
+        label=scene.unit;
+        if strcmp(info.mode,'local'), label=[label ' · 当前区域']; end
+        scene.colorbar.Label.String=label;
+        if index>1 && strcmp(scene.fieldMode,'centrifugal')
+            % Small regional differences require more digits than the
+            % automatic global labels (which can all round to the same text).
+            span=diff(limits); scale=max(abs(limits));
+            precision=min(15,max(6,ceil(log10(max(scale,realmin)/span))+3));
+            ticks=linspace(limits(1),limits(2),5);
+            scene.colorbar.Ticks=ticks;
+            scene.colorbar.TickLabels=arrayfun(@(v)sprintf('%.*g',precision,v),ticks,'UniformOutput',false);
+        else
+            scene.colorbar.TicksMode='auto'; scene.colorbar.TickLabelsMode='auto';
+        end
+        info.limits=limits;
+        setappdata(a,'ViewportColorStats',info);
+        scenes{index}=scene; plotHandles=scene;
+        stats=getappdata(fig,'RenderStats');
+        stats.colorScale=info.mode; stats.colorLimits=limits;
+        setappdata(fig,'RenderStats',stats);
+        updateSources();
+    end
+    function finishColorUpdate()
+        updatingColors=false;
+    end
+    function closeViewportUpdater(~,~)
+        closing=true;
+        if ~isempty(colorTimer) && isvalid(colorTimer)
+            stop(colorTimer); delete(colorTimer);
+        end
+        for sceneIndex=2:numel(scenes)
+            if ~isempty(scenes{sceneIndex}) && isfield(scenes{sceneIndex},'limitListeners')
+                delete(scenes{sceneIndex}.limitListeners);
+            end
+        end
     end
     function updateSources()
         switch mode.Value
@@ -398,6 +505,17 @@ updateCountry(); refreshPlot(); calculate();
             otherwise
                 sourceLabel.Text=sprintf(['重力：ICGEM / NGA EGM2008，180阶，1°网格，WGS84椭球面h=0；右侧按当地地表及相对高程计算。\n' ...
                     '来源：icgem.gfz-potsdam.de；高程：NOAA ETOPO 2022；国界：Natural Earth 1:50m。重力模式凹凸不是地形。']);
+        end
+        index=find(tabList==tabs.SelectedTab,1);
+        if index>1 && strcmp(mode.Value,'centrifugal') && isappdata(axesList(index),'ViewportColorStats')
+            colorInfo=getappdata(axesList(index),'ViewportColorStats');
+            switch colorInfo.mode
+                case 'local', scope='当前视窗';
+                case 'empty', scope='当前无数据，保留上次范围';
+                otherwise, scope='全球范围';
+            end
+            sourceLabel.Text=sprintf('%s\n色标：%s [%0.10g, %0.10g]；缩放只调整颜色和等值级别，不增加原始分辨率。', ...
+                sourceLabel.Text,scope,colorInfo.limits(1),colorInfo.limits(2));
         end
     end
     function scene=createScene(index,D)
@@ -455,6 +573,10 @@ updateCountry(); refreshPlot(); calculate();
         end
         scene.colorbar=colorbar(a); scene.colorbar.FontSize=10;
         hold(a,'off');
+        if index>1
+            scene.limitListeners=[addlistener(a,'XLim','PostSet',@(~,~)queueViewportChange(index)), ...
+                addlistener(a,'YLim','PostSet',@(~,~)queueViewportChange(index))];
+        end
     end
     function scene=updateGeometry(scene,D)
         a=scene.axes; p=scene.projection;
@@ -491,6 +613,7 @@ updateCountry(); refreshPlot(); calculate();
             if strcmp(p,'mercator'), valid=abs(D.lat)<=85; end
             [x,y]=gravity_project(D.longrid(valid,:),D.latgrid(valid,:),p);
             set(scene.field,'XData',x,'YData',y,'ZData',D.values(valid,:),'LevelList',D.levels);
+            scene.plotX=x; scene.plotY=y; scene.plotZ=D.values(valid,:);
             [x,y]=gravity_project(D.boundaryLon,D.boundaryLat,p);
             if strcmp(p,'mercator'), x(abs(D.boundaryLat)>85)=NaN; y(abs(D.boundaryLat)>85)=NaN; end
             set(scene.boundaries,'XData',x,'YData',y);

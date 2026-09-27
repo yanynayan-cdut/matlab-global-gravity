@@ -20,6 +20,7 @@ gravity_field_app
 - 197 个首都以红点标出，可在图中点击或按中英文国家名、首都名及 ISO 代码搜索。
 - 显示量包括重力扰动 `δg`、总重力 `g`、地表/海底高程和离心量；右侧计算器显示质量、首都经纬度、地表海拔、相对高程、椭球高、当地 `g`、`G` 和离心力。
 - 离心量可显示为加速度 `a_c`（m/s²）或按当前质量换算的力 `F_c`（N）。全球离心图固定取当地地表/海底 `Δh=0`；修改质量只改变 `force` 单位地图，修改相对高程只影响右侧计算器。
+- 二维离心图默认随缩放和平移调整当前区域的色标，重新分配 18 个色带，使局部差异更容易辨认。取消“二维离心图：自动局部色标”可固定全球色标；恢复全图后自动使用全球范围。四种二维投影及两种离心单位都支持此功能。
 - 默认名单为 193 个联合国成员国，加梵蒂冈、巴勒斯坦、库克群岛、纽埃；启动无需再次确认。
 
 ![Miller 圆柱投影](matlab_gravity_app/docs/miller_preview.png)
@@ -41,5 +42,13 @@ ETOPO 首都数据中有 5 个海岸混合样本，已按确认口径使用附�
 ![当前质量离心力](matlab_gravity_app/docs/centrifugal_force_preview.png)
 
 ![Miller 投影地表高程](matlab_gravity_app/docs/elevation_miller_preview.png)
+
+同一安第斯—赤道区域的离心加速度对照，依次为固定全球色标和自适应局部色标：
+
+![区域离心图：固定全球色标](matlab_gravity_app/docs/centrifugal_region_global_scale.png)
+
+![区域离心图：自适应局部色标](matlab_gravity_app/docs/centrifugal_region_local_scale.png)
+
+局部色标在缩放 / 平移短暂停止约 150 ms 后更新，色标增加数值位数，图下注明当前范围。比显示网格更窄的视窗使用现有网格插值；只改变颜色分配，源数值、环境缓存和计算器结果不变，也不提高应用中 1° 全球源场的分辨率。
 
 详细操作、函数接口和重建方式见 [应用说明](matlab_gravity_app/README.md)。数据、公式及许可见 [来源说明](matlab_gravity_app/SOURCES.md) 和 [地理数据溯源](matlab_gravity_app/data/DATA_PROVENANCE.md)，已有 MATLAB 验证结果见 [验证记录](matlab_gravity_app/VALIDATION.md)。
