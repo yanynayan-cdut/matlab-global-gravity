@@ -1,0 +1,29 @@
+% START_HERE Open the offline global gravity app in MATLAB R2022b or later.
+% Open this file in MATLAB and press Run. No path setup or download needed.
+% Data and the precomputed centrifugal cache are included in the bundle.
+
+if verLessThan('matlab','9.13')
+    error('GravityApp:MATLABVersion', ...
+        'This application requires MATLAB R2022b (9.13) or later.');
+end
+if ~usejava('jvm')
+    error('GravityApp:JavaRequired', ...
+        'Start MATLAB normally, without -nojvm. MATLAB includes its own JVM.');
+end
+gravityBundleRoot = fileparts(mfilename('fullpath'));
+gravityBundleFiles = {'gravity_field_app.m','gravity_at_location.m', ...
+    'centrifugal_at_location.m','gravity_project.m','gravity_display_geometry.m', ...
+    'gravity_viewport_color_limits.m','load_surface_environment.m', ...
+    fullfile('data','world_geodata.mat'),fullfile('data','gravity_grid.mat'), ...
+    fullfile('data','gravity_egm2008_n180_coefficients.mat'), ...
+    fullfile('data','terrain_data.mat')};
+for gravityBundleIndex = 1:numel(gravityBundleFiles)
+    if ~isfile(fullfile(gravityBundleRoot,gravityBundleFiles{gravityBundleIndex}))
+        error('GravityApp:IncompleteBundle', ...
+            'Missing %s. Extract the complete ZIP before running START_HERE.m.', ...
+            gravityBundleFiles{gravityBundleIndex});
+    end
+end
+addpath(gravityBundleRoot,'-begin');
+gravity_field_app;
+clear gravityBundleRoot gravityBundleFiles gravityBundleIndex

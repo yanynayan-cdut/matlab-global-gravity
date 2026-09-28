@@ -7,5 +7,6 @@ tests/__pycache__/
 *.asv
 runtime_probe.txt
 artifacts/
+releases/
 .env
 .env.*

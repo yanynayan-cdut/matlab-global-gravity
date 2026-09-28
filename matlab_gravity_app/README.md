@@ -6,6 +6,8 @@
 
 MATLAB R2022b 或更新版本，**不需要额外 MATLAB 工具箱**。
 
+也可直接在 MATLAB 中打开根目录的 `START_HERE.m` 并运行，启动文件会自动定位数据和配置当前会话的搜索路径。离线压缩包附齐运行数据、离心量缓存及宣传册，详见 [离线运行包说明](PACKAGE_README.md)。
+
 ```matlab
 cd('matlab_gravity_app') % 从仓库根目录进入应用目录
 gravity_field_app
